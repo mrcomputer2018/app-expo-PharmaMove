@@ -6,5 +6,8 @@ export const globalStyles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         padding: 20,
-    }
+    },
+    areaView: {
+        marginBottom: 20,
+    },
 });
