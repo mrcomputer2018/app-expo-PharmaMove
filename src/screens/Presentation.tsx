@@ -39,7 +39,7 @@ export default function Presentation({navigation}: any) {
                     e maximize a eficiência logística!
                 </Text>
             </View>
-r
+
             <Button
                 style={styles.button}
                 labelStyle={{ fontSize: 18 }}
