@@ -37,7 +37,6 @@ export default function Presentation() {
 
             <Button
                 style={ styles.button }
-                textColor='#f8f9far' 
                 buttonColor="#fd7e14"
                 icon="door" 
                 mode="contained" 
