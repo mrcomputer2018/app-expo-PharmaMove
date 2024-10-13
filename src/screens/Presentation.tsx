@@ -1,13 +1,24 @@
-import { View } from 'react-native';
+import { Image, SafeAreaView, View } from 'react-native';
 import { globalStyles as styles } from '../styles/globalStyles';
 import { Button, Text } from 'react-native-paper';
+import { StatusBar } from 'expo-status-bar';
 
 
 export default function Presentation() {
     return (
-        <View style={ styles.container }>
+       
+        <SafeAreaView style={ styles.container }>
+            <StatusBar style="light" />
+
+            <View>
+                <Image 
+                style={{ width: 120, height: 120, borderRadius: 60, marginBottom: 20 }}    
+                source={require('../assets/PharmaMove.webp')}/>
+            </View>
+
             <View style={ styles.areaView }>
                 <Text 
+                style={ styles.text }
                 variant="displaySmall"
                 >
                     Bem-vindo ao PharmaMove!
@@ -15,14 +26,19 @@ export default function Presentation() {
             </View>
         
             <View style={ styles.areaView }>
-                <Text variant='labelLarge'>
+                <Text 
+                style={ styles.text }
+                variant='labelLarge'>
                     Otimize a movimentação de produtos entre nossas filiais 
                     com praticidade e agilidade. Simplifique sua rotina 
                     e maximize a eficiência logística!
                 </Text>
             </View>
 
-            <Button 
+            <Button
+                style={ styles.button }
+                textColor='#f8f9far' 
+                buttonColor="#fd7e14"
                 icon="door" 
                 mode="contained" 
                 onPress={() => console.log('Pressed')}
@@ -30,6 +46,6 @@ export default function Presentation() {
                 Entrar
             </Button>
 
-        </View>
+        </SafeAreaView>
     );
 }
