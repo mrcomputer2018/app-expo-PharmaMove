@@ -4,7 +4,12 @@ import { Button, Text } from 'react-native-paper';
 import { StatusBar } from 'expo-status-bar';
 
 
-export default function Presentation() {
+export default function Presentation({navigation}: any) {
+
+    function handleNavigateToLogin() {
+        navigation.navigate('Login');
+    }
+
     return (
        
         <SafeAreaView style={ styles.container }>
@@ -27,20 +32,21 @@ export default function Presentation() {
         
             <View style={ styles.areaView }>
                 <Text 
-                style={ styles.text }
+                style={ [styles.text, { opacity: 0.8 }] }
                 variant='labelLarge'>
                     Otimize a movimentação de produtos entre nossas filiais 
                     com praticidade e agilidade. Simplifique sua rotina 
                     e maximize a eficiência logística!
                 </Text>
             </View>
-
+r
             <Button
-                style={ styles.button }
+                style={styles.button}
+                labelStyle={{ fontSize: 18 }}
                 buttonColor="#fd7e14"
                 icon="door" 
                 mode="contained" 
-                onPress={() => console.log('Pressed')}
+                onPress={() => handleNavigateToLogin()}
             >
                 Entrar
             </Button>

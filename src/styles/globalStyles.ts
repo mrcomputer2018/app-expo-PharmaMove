@@ -16,7 +16,6 @@ export const globalStyles = StyleSheet.create({
         color: "#f8f9fa",
     },
     button: {
-        marginTop: 20,
-        color: "#004085",
+        marginTop: 40,
     },
 });
