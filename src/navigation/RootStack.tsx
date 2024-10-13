@@ -8,7 +8,11 @@ export default function RootStack() {
     return (
         <Stack.Navigator initialRouteName="Apresentacao">
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Apresentacao" component={Presentation} />
+            <Stack.Screen 
+                name="Apresentacao" 
+                component={Presentation} 
+                options={{ headerShown: false }}
+            />
         </Stack.Navigator>
     );
 }
