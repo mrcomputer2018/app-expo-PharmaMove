@@ -78,7 +78,7 @@ export default function Login() {
                     selectionColor="#004085"
                     underlineColorAndroid={ '#fd7e14' }
                     textColor='#004085'
-                    secureTextEntry
+                    secureTextEntry={!showPassword}
                     placeholderTextColor="#6c757d"
                     right={<TextInput.Icon 
                         icon={showPassword ? "eye-off" : "eye"}
