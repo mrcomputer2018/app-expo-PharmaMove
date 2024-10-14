@@ -28,6 +28,7 @@ export default function App() {
                     textColor='#004085'
                     secureTextEntry
                     placeholderTextColor="#6c757d"
+                    keyboardType='email-address'
                     right={<TextInput.Icon icon="mail" color="#004085" />}
                 />
             </View>
