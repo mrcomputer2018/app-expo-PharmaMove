@@ -1,16 +1,48 @@
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
 import { Button, TextInput, Text } from 'react-native-paper';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
+const schema = z.object({
+    email: z
+        .string()
+        .email('Email inválido')
+        .nonempty('O campo email é obrigatório'),
+    password: z
+        .string()
+        .min(6, 'A senha deve ter no mínimo 6 caracteres')
+        .nonempty('O campo senha é obrigatório')
+});
 
-export default function App() {
+// Tipos baseados no esquema Zod para maior segurança com TypeScript
+type FormData = z.infer<typeof schema>;
+  
+
+export default function Login() {
+    // Estado para mostrar ou esconder a senha
+    const [showPassword, setShowPassword] = useState(false);
+
+    // useForm com Zod integration para validação
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
+        resolver: zodResolver(schema)
+    });
+
+    // Função chamada quando o formulário é enviado corretamente
+    const onSubmit = (data: FormData) => {
+        console.log(data);
+    };
+
     return (
         <SafeAreaView style={[globalStyles.container, {
             justifyContent: "center",
             }
         ]}>
             <StatusBar style="light" />
+
             <View style={ [ globalStyles.areaView, { marginBottom: 60}] }>
                 <Text 
                     style={ globalStyles.text }
@@ -23,6 +55,8 @@ export default function App() {
             <View style={ globalStyles.formGroup }>
                 <TextInput
                     label="E-mail"
+                    // Integração com React Hook Form
+                    onChangeText={(text) => setValue('email', text)}
                     selectionColor="#004085"
                     underlineColorAndroid={ '#fd7e14' }
                     textColor='#004085'
@@ -31,18 +65,32 @@ export default function App() {
                     keyboardType='email-address'
                     right={<TextInput.Icon icon="mail" color="#004085" />}
                 />
+
+                {errors.email && <Text style={styles.errorText}>
+                    {errors.email.message}
+                </Text>}
             </View>
 
             <View style={ globalStyles.formGroup }>
                 <TextInput
                     label="Senha"
+                    onChangeText={(text) => setValue('password', text)} 
                     selectionColor="#004085"
                     underlineColorAndroid={ '#fd7e14' }
                     textColor='#004085'
                     secureTextEntry
                     placeholderTextColor="#6c757d"
-                    right={<TextInput.Icon icon="eye" color="#004085"/>}
+                    right={<TextInput.Icon 
+                        icon={showPassword ? "eye-off" : "eye"}
+                        color="#004085"
+                        onPress={() => setShowPassword(!showPassword)}
+                        />
+                    }
                 />
+
+                {errors.password && <Text style={styles.errorText}>
+                    {errors.password.message}
+                </Text>}
             </View>
 
             <Button
@@ -50,8 +98,8 @@ export default function App() {
                 labelStyle={{ fontSize: 18 }}
                 buttonColor="#fd7e14"
                 icon="door" 
-                mode="contained" 
-                onPress={() => console.log("Logar")}
+                mode="contained"
+                onPress={handleSubmit(onSubmit)} 
             >
                 Logar
             </Button>
@@ -66,4 +114,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    errorText: {
+        color: 'red',
+        marginBottom: 10,
+    }
 });
