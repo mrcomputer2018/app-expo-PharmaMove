@@ -1,28 +1,47 @@
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, Text, View, TextInput } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
-import { Button } from 'react-native-paper';
+import { Button, TextInput, Text } from 'react-native-paper';
 
 
 export default function App() {
     return (
         <SafeAreaView style={[globalStyles.container, {
-            backgroundColor: "#f8f9fa",
+            justifyContent: "center",
             }
         ]}>
-            <StatusBar style="auto" />
-            <View>
-                <Text>Login</Text>
+            <StatusBar style="light" />
+            <View style={ [ globalStyles.areaView, { marginBottom: 60}] }>
+                <Text 
+                    style={ globalStyles.text }
+                    variant="displaySmall"
+                >
+                   Login
+                </Text>
             </View>
 
-            <View>
-                <Text>E-mail</Text>
-                <TextInput />
+            <View style={ globalStyles.formGroup }>
+                <TextInput
+                    label="E-mail"
+                    selectionColor="#004085"
+                    underlineColorAndroid={ '#fd7e14' }
+                    textColor='#004085'
+                    secureTextEntry
+                    placeholderTextColor="#6c757d"
+                    right={<TextInput.Icon icon="mail" color="#004085" />}
+                />
             </View>
 
-            <View>
-                <Text>Senha</Text>
-                <TextInput />
+            <View style={ globalStyles.formGroup }>
+                <TextInput
+                    label="Senha"
+                    selectionColor="#004085"
+                    underlineColorAndroid={ '#fd7e14' }
+                    textColor='#004085'
+                    secureTextEntry
+                    placeholderTextColor="#6c757d"
+                    right={<TextInput.Icon icon="eye" color="#004085"/>}
+                />
             </View>
 
             <Button
