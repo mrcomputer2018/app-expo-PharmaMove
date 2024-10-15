@@ -1,13 +1,29 @@
 import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../components/Header';
+import { useAuth } from '../contexts/AuthContext';
+import { User } from '../components/Header';
+import { StatusBar } from 'expo-status-bar';
+import { globalStyles } from '../styles/globalStyles';
 
 export default function Home() {
+
+    const { user, signOut } = useAuth();
+
     return (
         <SafeAreaView>
-            <Header />
+            <StatusBar style="light"  backgroundColor='#004085'/>
 
-            <Text>Home</Text>
+            {user && 
+            <Header data={ user as unknown as User | null } 
+            signOut={ signOut }/>}
+
+            <View style={ [globalStyles.container, {
+                    backgroundColor: "#f8f9fa",
+                } 
+            ]}>
+
+            </View>
             
         </SafeAreaView>
     );

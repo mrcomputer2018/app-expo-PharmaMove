@@ -24,7 +24,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
   
 
-export default function Login() {
+export default function Login({ navigation }: any) {
     // acessando contexto global
     const { signIn, loading } = useAuth();
 
@@ -32,7 +32,7 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
 
     // useForm com Zod integration para validação
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
+    const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema)
     });
 
@@ -42,6 +42,9 @@ export default function Login() {
         const password = data.password.toString();
 
         signIn(email, password);
+
+        // Após o login bem-sucedido, limpa os campos
+        reset();
     };
 
     return (

@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     function signOut() {
         setUser(null);
-       /*  storeData('@user', null); */
+        storeData('@user', null);
     }
 
     return (
