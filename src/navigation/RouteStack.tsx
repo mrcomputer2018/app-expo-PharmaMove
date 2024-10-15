@@ -5,7 +5,8 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function RouteStack() {
 
-    const { signed } = useAuth();
+   /*  const { signed } = useAuth(); */
+    const signed = true;
 
     return (
         <>
