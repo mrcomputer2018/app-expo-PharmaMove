@@ -1,9 +1,14 @@
 import { View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Header from '../components/Header';
 
 export default function Home() {
     return (
-        <View>
+        <SafeAreaView>
+            <Header />
+
             <Text>Home</Text>
-        </View>
+            
+        </SafeAreaView>
     );
 }
