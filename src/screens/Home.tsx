@@ -18,10 +18,7 @@ export default function Home() {
             <Header data={ user as unknown as User | null } 
             signOut={ signOut }/>}
 
-            <View style={ [globalStyles.container, {
-                    backgroundColor: "#f8f9fa",
-                } 
-            ]}>
+            <View style={ globalStyles.container }>
 
             </View>
             
