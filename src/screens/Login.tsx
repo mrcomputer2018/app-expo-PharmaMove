@@ -6,6 +6,8 @@ import { Button, TextInput, Text } from 'react-native-paper';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useAuth } from '../contexts/AuthContext';
+import Loading from '../components/Loading';
 
 const schema = z.object({
     email: z
@@ -23,6 +25,9 @@ type FormData = z.infer<typeof schema>;
   
 
 export default function Login() {
+    // acessando contexto global
+    const { signIn, loading } = useAuth();
+
     // Estado para mostrar ou esconder a senha
     const [showPassword, setShowPassword] = useState(false);
 
@@ -33,7 +38,10 @@ export default function Login() {
 
     // Função chamada quando o formulário é enviado corretamente
     const onSubmit = (data: FormData) => {
-        console.log(data);
+        const email = data.email;
+        const password = data.password.toString();
+
+        signIn(email, password);
     };
 
     return (
@@ -97,11 +105,11 @@ export default function Login() {
                 style={globalStyles.button}
                 labelStyle={{ fontSize: 18 }}
                 buttonColor="#fd7e14"
-                icon="door" 
+                icon={ loading ? '' : 'login' } 
                 mode="contained"
                 onPress={handleSubmit(onSubmit)} 
             >
-                Logar
+                { loading ? <Loading color='white'/> : 'Logar' }
             </Button>
         </SafeAreaView>
     );

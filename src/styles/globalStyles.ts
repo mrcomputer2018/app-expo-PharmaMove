@@ -16,6 +16,7 @@ export const globalStyles = StyleSheet.create({
     button: {
         marginTop: 40,
         padding: 5,
+        fontWeight: "bold",
     },
     formGroup: {
         marginBottom: 20,
