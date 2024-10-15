@@ -4,7 +4,6 @@ import { ReactNode } from 'react';
 import { storeData } from '../services/storage';
 
 interface AuthContextData {
-    signed: boolean;
     user: User | null;
     signIn: (email: any, password: any) => void;
     signOut: () => void;
@@ -27,19 +26,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(false);
 
-    function signIn(email: any, password: any) {
+    function signIn(email: string, password: string) {
         setLoading(true);
-
+       
         axios.post('http://192.168.0.212:3000/login', {
-            email: email,
-            passord: password
+            email: "guilherme@guilherme.com", 
+            password: "12341234"
         })
-        .then(function (response) {
+        .then((response) => {
             setUser(response.data);
             storeData('@user', response.data);
             setLoading(false);
         })
-        .catch(function (error) {
+        .catch((error) => {
             console.error(error);
             alert("Erro ao fazer login");
             setLoading(false);
@@ -53,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     return (
         <AuthContext.Provider 
-        value={{ signed: !!user, user, signIn, signOut, loading }}>
+        value={{ user, signIn, signOut, loading }}>
             {children}
         </AuthContext.Provider>
     );

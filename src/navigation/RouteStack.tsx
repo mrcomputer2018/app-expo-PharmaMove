@@ -5,16 +5,19 @@ import { useAuth } from "../contexts/AuthContext";
 
 export default function RouteStack() {
 
-   /*  const { signed } = useAuth(); */
-    const signed = true;
+    const { user }: any = useAuth();
+
+    console.log(user);
 
     return (
         <>
             { 
-                signed 
-                ? <AuthStack /> 
-                : <RootStack />
+                user
+            ? 
+                <AuthStack />
+            : 
+                <RootStack />
             }
         </>
-    );
+    )
 }
