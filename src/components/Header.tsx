@@ -1,4 +1,5 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { headerStyles as styles } from '../styles/headerStyles';
 import { Feather } from '@expo/vector-icons';
 
 type HeaderProps = {
@@ -42,43 +43,3 @@ export default function Header({ data, signOut }: HeaderProps) {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 14,
-        padding: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: "#f1f1f1",
-        elevation: 2,
-        backgroundColor: "##f8f9fa",
-    },
-    containerProfile: {
-        flexDirection: "row",
-        alignItems: "center",
-        gap: 12
-    },
-    image : {
-        width: 60,
-        height: 60,
-        borderRadius: 30
-    },
-    name: {
-        fontWeight: "bold",
-        fontSize: 17,
-        color: "#333",
-    },
-    profile: {
-        fontSize: 14,
-        color: "#666",
-    },
-    button: {
-        padding: 10,
-        borderRadius: 8,
-        borderColor: "#666",
-        borderWidth: 1,
-        backgroundColor: "gray",
-    }
-});

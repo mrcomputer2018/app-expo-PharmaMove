@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { ReactNode } from 'react';
-import { storeData } from '../services/storage';
+import { getData, storeData } from '../services/storage';
 
 interface AuthContextData {
     user: User | null;
@@ -26,12 +26,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(false);
 
+    useEffect(() => {
+        async function loadStorageData() {
+            const storagedUser = await getData('@user');
+            if (storagedUser) {
+                setUser(storagedUser);
+            }
+        }
+
+        loadStorageData();
+    }, []);
+
     function signIn(email: string, password: string) {
         setLoading(true);
        
         axios.post('http://192.168.0.212:3000/login', {
-            email: "guilherme@guilherme.com", 
-            password: "12341234"
+            email: `${email}`, 
+            password: `${password}`
         })
         .then((response) => {
             setUser(response.data);

@@ -7,8 +7,6 @@ export default function RouteStack() {
 
     const { user }: any = useAuth();
 
-    console.log(user);
-
     return (
         <>
             { 
