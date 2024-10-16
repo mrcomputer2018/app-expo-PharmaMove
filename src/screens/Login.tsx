@@ -49,9 +49,7 @@ export default function Login({ navigation }: any) {
     };
 
     return (
-        <SafeAreaView style={[globalStyles.container, {
-            justifyContent: "center",
-            }
+        <SafeAreaView style={[globalStyles.container, styles.container
         ]}>
             <StatusBar style="light" />
 

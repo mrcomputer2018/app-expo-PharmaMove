@@ -4,7 +4,6 @@ export const loginStyles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#004085',
-        alignItems: 'center',
         justifyContent: 'center',
     },
     errorText: {
