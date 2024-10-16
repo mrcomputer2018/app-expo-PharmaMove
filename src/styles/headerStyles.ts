@@ -7,9 +7,10 @@ export const headerStyles = StyleSheet.create({
         justifyContent: "space-between",
         gap: 14,
         padding: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: "#f1f1f1",
-        elevation: 2,
+        borderBottomWidth: 2,
+        borderBottomColor: "#ddd",
+        shadowColor: "#000",
+        elevation: 1,
         backgroundColor: "##f8f9fa",
     },
     containerProfile: {

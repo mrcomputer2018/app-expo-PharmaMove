@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { globalStyles } from '../styles/globalStyles';
+import { loginStyles as styles } from '../styles/loginStyles';
 import { Button, TextInput, Text } from 'react-native-paper';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -71,7 +72,7 @@ export default function Login({ navigation }: any) {
                     selectionColor="#004085"
                     underlineColorAndroid={ '#fd7e14' }
                     textColor='#004085'
-                    secureTextEntry
+                    autoCapitalize='none'
                     placeholderTextColor="#6c757d"
                     keyboardType='email-address'
                     right={<TextInput.Icon icon="mail" color="#004085" />}
@@ -117,16 +118,3 @@ export default function Login({ navigation }: any) {
         </SafeAreaView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    errorText: {
-        color: 'red',
-        marginBottom: 10,
-    }
-});

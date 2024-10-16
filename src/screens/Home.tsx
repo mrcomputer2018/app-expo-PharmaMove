@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { User } from '../components/Header';
 import { StatusBar } from 'expo-status-bar';
 import { globalStyles } from '../styles/globalStyles';
+import CardHome from '../components/CardHome';
 
 export default function Home() {
 
@@ -19,6 +20,10 @@ export default function Home() {
             signOut={ signOut }/>}
 
             <View style={ globalStyles.container }>
+
+                <CardHome />
+
+                <CardHome />
 
             </View>
             
