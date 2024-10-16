@@ -15,7 +15,7 @@ export default function Home({ navigation }: any) {
     const image2 = require('../assets/usuarios.jpg');
 
     function handleNavigateToListUsers() {
-        console.log('Clicou em Usuários');
+        navigation.navigate('Usuarios');
     }
 
     function handleNavigateToStock() {

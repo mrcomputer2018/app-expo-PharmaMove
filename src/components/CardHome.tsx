@@ -11,7 +11,7 @@ export default function CardHome({image, title, subtitle, action}: CardHomeProps
     return (
         <TouchableOpacity 
             style={ styles.container }
-            onPress={ () => console.log('Clicou') }
+            onPress={ action }
         >
             <Image 
                 style= { styles.image }
