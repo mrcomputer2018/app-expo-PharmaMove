@@ -7,9 +7,20 @@ import { StatusBar } from 'expo-status-bar';
 import { globalStyles } from '../styles/globalStyles';
 import CardHome from '../components/CardHome';
 
-export default function Home() {
+export default function Home({ navigation }: any) {
 
     const { user, signOut } = useAuth();
+
+    const image = require('../assets/estoque.jpg');
+    const image2 = require('../assets/usuarios.jpg');
+
+    function handleNavigateToListUsers() {
+        console.log('Clicou em Usuários');
+    }
+
+    function handleNavigateToStock() {
+        console.log('Clicou em Estoque');
+    }
 
     return (
         <SafeAreaView>
@@ -19,11 +30,21 @@ export default function Home() {
             <Header data={ user as unknown as User | null } 
             signOut={ signOut }/>}
 
-            <View style={ globalStyles.container }>
+            <View style={ [globalStyles.container, { marginTop: 40 } ]}>
 
-                <CardHome />
+                <CardHome 
+                    image={image} 
+                    title="Estoque" 
+                    subtitle="Controle de Estoque de Medicamentos"
+                    action={ handleNavigateToStock }
+                />
 
-                <CardHome />
+                <CardHome 
+                    image={image2}
+                    title="Usuários" 
+                    subtitle="Controle de Usuários"
+                    action={ handleNavigateToListUsers }
+                />
 
             </View>
             
