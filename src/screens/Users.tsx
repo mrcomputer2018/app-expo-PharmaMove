@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import {View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import axios from 'axios';
+
 import { Feather } from '@expo/vector-icons';
 import { globalStyles } from '../styles/globalStyles';
-import { headerStyles } from '../styles/headerStyles';
-import { Switch } from 'react-native-paper';
+import ListUsers from '../components/ListUsers';
+import { loadingStyles } from '../styles/loadingStyles';
+import { set } from 'zod';
 
 type User = { 
     id: number; 
@@ -37,7 +40,24 @@ export default function Users() {
     const [isEnabled, setIsEnabled] = useState(false);
 
     useEffect(() => {
-        console.log('Listagem de Usuários');
+        function getUsers() {
+            
+            setIsEnabled(true);
+
+            axios.get(process.env.EXPO_PUBLIC_API_URL + '/users')
+            .then((response) => {
+                setUsers(response.data);
+                setIsEnabled(false);
+            })
+            .catch((error) => {
+                console.error(error);
+                alert("Erro ao buscar usuários");
+                setIsEnabled(false);
+            });
+        }
+
+        getUsers();
+
     }, []);
 
     return (
@@ -58,38 +78,7 @@ export default function Users() {
                 data={users}
                 keyExtractor={item => item.id.toString()}
                 renderItem={({ item }) => (
-                    <View style={[ globalStyles.container, styles.container, { opacity: item.status ? 1 : 0.2 } ]}>
-                        <Image 
-                            style={ styles.image }
-                            source={require('../assets/motorista.jpg')}
-                        />
-                        
-                        <View style={globalStyles.container}>
-                            <Text style={ headerStyles.name }>
-                                {item.name}
-                            </Text>
-                            <Text style={ headerStyles.profile }>
-                                {item.profile}
-                            </Text>
-                        </View>
-
-                        <View style={ styles.areaSwitch }>
-                            <Text style={ styles.textSwitch }>
-                                {item.status ? 'Ativo' : 'Inativo'}
-                            </Text>
-                            <Switch 
-                                value={item.status} 
-                                onValueChange={(value) => {
-                                    const updatedUsers = users.map(user => 
-                                        user.id === item.id ? { ...user, status: value } : user
-                                    );
-                                    setUsers(updatedUsers);
-                                }}
-                                trackColor={{false: '#767577', true: '#ccc'}}
-                                thumbColor={isEnabled ? '#f4f3f4' :'#004085'}
-                            />
-                        </View>
-                    </View>
+                    <ListUsers item={item} users={users} /* setusers={setUsers} */ />
                 )}
                 ListEmptyComponent={() => <Text>Nenhum usuário encontrado</Text>}
                 showsVerticalScrollIndicator={false}
@@ -99,29 +88,6 @@ export default function Users() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        backgroundColor: "#fff",
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-        paddingVertical: 8,
-        borderRadius: 8,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 2,
-    },
-    image: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-    },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
@@ -153,17 +119,4 @@ const styles = StyleSheet.create({
     areaFlatlist: {
         marginTop: 30,
     },
-    areaSwitch: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10,
-    },
-    textSwitch: {
-        fontSize: 14,
-        color: '#004085',
-        textAlign: 'center',
-        marginLeft: 10,
-        marginTop: 10,
-    },
-
 });

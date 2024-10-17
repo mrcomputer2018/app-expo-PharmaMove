@@ -19,7 +19,6 @@ interface AuthProviderProps {
     children: ReactNode;
 }
 
-
 const AuthContext = createContext<AuthContextData>({} as AuthContextData);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
@@ -40,7 +39,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     function signIn(email: string, password: string) {
         setLoading(true);
        
-        axios.post('http://192.168.0.212:3000/login', {
+        axios.post(process.env.EXPO_PUBLIC_API_URL + '/login', {
             email: `${email}`, 
             password: `${password}`
         })
