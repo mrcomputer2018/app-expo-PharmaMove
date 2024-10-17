@@ -9,17 +9,21 @@ type User = {
     id: number;
     profile: string;
     name: string;
-    status: boolean;
+    status: number;
 }
 
 type ListUsersProps = {
     item: User;
-    users: User[];
+    action: (item: User) => Promise<void>;
 };
 
-export default function ListUsers({ item, users }: ListUsersProps) {
+export default function ListUsers({ item, action }: ListUsersProps) {
 
-    const [isEnabled, setIsEnabled] = useState(false);
+    const num = item.status;
+    const booleanValue = !!num;
+
+    const [isEnabled, setIsEnabled] = useState(booleanValue);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     
     return (
         <View style={[ globalStyles.container, styles.container, { opacity: item.status ? 1 : 0.2 } ]}>
@@ -42,15 +46,10 @@ export default function ListUsers({ item, users }: ListUsersProps) {
                     {item.status ? 'Ativo' : 'Inativo'}
                 </Text>
                 <Switch 
-                    value={item.status} 
-                    onValueChange={(value) => {
-                        const updatedUsers: User[] = users.map((user: User) => 
-                            user.id === item.id ? { ...user, status: value } : user
-                        );
-                        /* setusers(updatedUsers); */
-                    }}
+                    value={isEnabled} 
+                    onChange={() => action(item)}
                     trackColor={{false: '#767577', true: '#ccc'}}
-                    thumbColor={isEnabled ? '#f4f3f4' :'#004085'}
+                    thumbColor={isEnabled ? '#004085' : '#f4f3f4'}
                 />
             </View>
         </View>

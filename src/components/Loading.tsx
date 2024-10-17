@@ -4,12 +4,13 @@ import { loadingStyles as styles } from "../styles/loadingStyles";
 
 type LoadingProps = {
     color?: string;
+    size: number | "small" | "large";
 }
 
-export default function Loading({color}: LoadingProps) {
+export default function Loading({size, color}: LoadingProps) {
     return (
         <View style={styles.container}>
-            <ActivityIndicator animating={true} color={color || MD2Colors.white} />
+            <ActivityIndicator size={size} animating={true} color={color || MD2Colors.white} />
         </View>
     );
 }

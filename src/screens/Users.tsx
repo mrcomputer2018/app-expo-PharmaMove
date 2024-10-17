@@ -5,8 +5,8 @@ import axios from 'axios';
 import { Feather } from '@expo/vector-icons';
 import { globalStyles } from '../styles/globalStyles';
 import ListUsers from '../components/ListUsers';
-import { loadingStyles } from '../styles/loadingStyles';
-import { set } from 'zod';
+import Loading from '../components/Loading';
+import { boolean, set } from 'zod';
 
 type User = { 
     id: number; 
@@ -16,49 +16,53 @@ type User = {
     full_address: string;
     email: string;
     password: string;
-    status: boolean;
+    status: number;
     createdAt: string;
     updatedAt: string;
  }
 
 export default function Users() {
 
-    const [users, setUsers] = useState<User[]>([
-        {
-            id: 2,
-            profile: "motorista",
-            name: "guilherme ribeiro",
-            document: "02644311209",
-            full_address: "Rua das flores, 69 - Bento Ribeiro - RJ",
-            email: "guilherme@guilherme.com",
-            password: "12341234",
-            status: true,
-            createdAt: "2024-10-16T16:01:29.914Z",
-            updatedAt: "2024-10-16T16:01:29.914Z"
-        }
-    ]);
-    const [isEnabled, setIsEnabled] = useState(false);
-
+    const [users, setUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState(false);
+   
     useEffect(() => {
-        function getUsers() {
+    
+            getUsers();
+    
+    }, [setLoading]);
+
+    function getUsers() {
             
-            setIsEnabled(true);
+        setLoading(true);
 
-            axios.get(process.env.EXPO_PUBLIC_API_URL + '/users')
-            .then((response) => {
-                setUsers(response.data);
-                setIsEnabled(false);
-            })
-            .catch((error) => {
-                console.error(error);
-                alert("Erro ao buscar usuários");
-                setIsEnabled(false);
-            });
-        }
+        axios.get(process.env.EXPO_PUBLIC_API_URL + '/users')
+        .then((response) => {
+            setUsers(response.data);
+            setLoading(false);
+        })
+        .catch((error) => {
+            console.error(error);
+            setLoading(false);
+            alert("Erro ao buscar usuários");
+        });
+     }
 
-        getUsers();
+    async function handleSwitch(item: User) {
+        setLoading(true);
 
-    }, []);
+        await axios.patch(`http://192.168.0.212:3000/users/${item.id}/toggle-status`,{})
+        .then(response => {
+            alert("Status atualizado com sucesso");
+            setLoading(false);
+            getUsers();
+        })
+        .catch(error => {
+            console.error(error);
+            alert("Erro ao atualizar status");
+            setLoading(false);
+        });
+    }
 
     return (
         <View style={ globalStyles.container }>
@@ -73,16 +77,22 @@ export default function Users() {
                 </Text>
             </TouchableOpacity>
 
-            <FlatList
-                style={ styles.areaFlatlist} 
-                data={users}
-                keyExtractor={item => item.id.toString()}
-                renderItem={({ item }) => (
-                    <ListUsers item={item} users={users} /* setusers={setUsers} */ />
-                )}
-                ListEmptyComponent={() => <Text>Nenhum usuário encontrado</Text>}
-                showsVerticalScrollIndicator={false}
-            />
+            { loading ?
+                <Loading size={60} color="#004085" />
+                :
+                <FlatList
+                    style={ styles.areaFlatlist} 
+                    data={users}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <ListUsers item={item} action={handleSwitch}/>
+                    )}
+                    ListEmptyComponent={
+                        () => <Text>Nenhum usuário encontrado</Text>
+                    }
+                    showsVerticalScrollIndicator={false}
+                />           
+            }
         </View>
     );
 }
