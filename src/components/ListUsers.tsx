@@ -5,16 +5,20 @@ import { globalStyles } from '../styles/globalStyles';
 import { headerStyles } from '../styles/headerStyles';
 import { listUsersStyles as styles } from '../styles/listUsersStyles';
 
-type User = {
-    id: number;
+type UserProps = {
+    id: number; 
     profile: string;
     name: string;
+    document: string;
+    full_address: string;
+    email: string;
+    password: string;
     status: number;
 }
 
 type ListUsersProps = {
-    item: User;
-    action: (item: User) => Promise<void>;
+    item: UserProps;
+    action: (item: UserProps) => Promise<void>;
 };
 
 export default function ListUsers({ item, action }: ListUsersProps) {

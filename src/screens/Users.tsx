@@ -6,7 +6,7 @@ import { Feather } from '@expo/vector-icons';
 import { globalStyles } from '../styles/globalStyles';
 import ListUsers from '../components/ListUsers';
 import Loading from '../components/Loading';
-import { boolean, set } from 'zod';
+
 
 type User = { 
     id: number; 
@@ -17,8 +17,6 @@ type User = {
     email: string;
     password: string;
     status: number;
-    createdAt: string;
-    updatedAt: string;
  }
 
 export default function Users() {
