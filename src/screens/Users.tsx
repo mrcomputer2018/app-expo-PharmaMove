@@ -7,6 +7,7 @@ import { globalStyles } from '../styles/globalStyles';
 import ListUsers from '../components/ListUsers';
 import Loading from '../components/Loading';
 import Empty from '../components/Empty';
+import { Button } from 'react-native-paper';
 
 
 type User = { 
@@ -20,17 +21,19 @@ type User = {
     status: number;
 }
 
-export default function Users() {
+export default function Users({ navigation }: any) {
 
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(false);
    
+    // Carregango usuários na tela
     useEffect(() => {
     
             getUsers();
     
     }, [setLoading]);
 
+    // Função para buscar usuários
     function getUsers() {
             
         setLoading(true);
@@ -47,6 +50,7 @@ export default function Users() {
         });
      }
 
+     // Função para atualizar status do usuário
     async function handleSwitch(item: User) {
         setLoading(true);
 
@@ -63,15 +67,23 @@ export default function Users() {
         });
     }
 
+    // Função para navegar para tela de adicionar usuário
+    function handleNavigateToAddUser() {
+        navigation.navigate('Adicionar Usuário');
+    }
+
     return (
         <SafeAreaView style={ globalStyles.container }>
-
-            <TouchableOpacity style={ styles.areaButton }>
-                <Feather name="plus" size={28} color="#fff" />
-                <Text style= { styles.textButton }>
-                    Adicionar Usuário
-                </Text>
-            </TouchableOpacity>
+            <Button
+                style={ globalStyles.button }
+                labelStyle={{ fontSize: 18 }}
+                buttonColor="#fd7e14"
+                icon="plus-circle" 
+                mode="contained" 
+                onPress={ handleNavigateToAddUser }
+            >
+                Adicionar usuário
+            </Button>
 
             { loading ?
                 <Loading size={60} color="#004085" />
