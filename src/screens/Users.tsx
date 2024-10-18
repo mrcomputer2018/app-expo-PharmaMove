@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import {View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
 import axios from 'axios';
 
 import { Feather } from '@expo/vector-icons';
 import { globalStyles } from '../styles/globalStyles';
 import ListUsers from '../components/ListUsers';
 import Loading from '../components/Loading';
+import Empty from '../components/Empty';
 
 
 type User = { 
@@ -17,7 +18,7 @@ type User = {
     email: string;
     password: string;
     status: number;
- }
+}
 
 export default function Users() {
 
@@ -63,10 +64,7 @@ export default function Users() {
     }
 
     return (
-        <View style={ globalStyles.container }>
-            <Text style={ styles.title }>
-                Listagem de Usuários
-            </Text>
+        <SafeAreaView style={ globalStyles.container }>
 
             <TouchableOpacity style={ styles.areaButton }>
                 <Feather name="plus" size={28} color="#fff" />
@@ -86,12 +84,12 @@ export default function Users() {
                         <ListUsers item={item} action={handleSwitch}/>
                     )}
                     ListEmptyComponent={
-                        () => <Text>Nenhum usuário encontrado</Text>
+                        () => <Empty />
                     }
                     showsVerticalScrollIndicator={false}
                 />           
             }
-        </View>
+        </SafeAreaView>
     );
 }
 
