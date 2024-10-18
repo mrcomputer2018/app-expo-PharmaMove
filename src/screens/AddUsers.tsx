@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import 
 { View, Text, TextInput, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Alert } 
 from 'react-native';
@@ -72,19 +72,21 @@ export default function AddUsers() {
     const selectedProfile = watch('profile');
 
     const onSubmit = (data: FormData) => {
+
+        setLoading(true);
         
-        axios.post(process.env.REACT_APP_API_URL + '/register', {
+        axios.post(process.env.EXPO_PUBLIC_API_URL + '/register', {
             profile: data.profile,
             name: data.name,
             document: data.document,
             full_address: data.full_address,
             email: data.email,
-            password: data.password
+            password: data.password,
         })
         .then((response) => {
             console.log(response.data);
             Alert.alert('Sucesso', 'Usuário cadastrado com sucesso');
-
+            setLoading(false);
             reset({
                 profile: '',
                 name: '',
@@ -97,6 +99,7 @@ export default function AddUsers() {
         .catch((error) => {
             console.log(error);
             Alert.alert('Erro', 'Não foi possível cadastrar o usuário');
+            setLoading(false);
         });
     };
     
@@ -280,7 +283,7 @@ export default function AddUsers() {
                         style={globalStyles.button}
                         labelStyle={{ fontSize: 18 }}
                         buttonColor="#fd7e14"
-                        icon="check-circle"
+                        icon={ loading ? '' : 'check-circle' }
                         mode="contained"
                         onPress={handleSubmit(onSubmit)}
                     >
