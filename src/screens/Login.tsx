@@ -33,7 +33,7 @@ export default function Login({ navigation }: any) {
     const [showPassword, setShowPassword] = useState(false);
 
     // useForm com Zod integration para validação
-    const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm<FormData>({
+    const { register, setValue, handleSubmit, control, reset, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema)
     });
 
@@ -111,7 +111,7 @@ export default function Login({ navigation }: any) {
                 mode="contained"
                 onPress={handleSubmit(onSubmit)} 
             >
-                { loading ? <Loading color='white'/> : 'Logar' }
+                { loading ? <Loading size="small" color='white'/> : 'Logar' }
             </Button>
         </SafeAreaView>
     );

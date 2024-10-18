@@ -1,123 +1,257 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 
-{ View, Text, TextInput, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+{ View, Text, TextInput, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } 
+from 'react-native';
 import { Button } from 'react-native-paper';
-import { FontAwesome } from '@expo/vector-icons';
 import { globalStyles } from '../styles/globalStyles';
-import { SelectList } from 'react-native-dropdown-select-list';
+import {Picker} from '@react-native-picker/picker';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+// Define a custom type for your form data
+type FormData = {
+    profile: string;
+    name: string;
+    document: string;
+    full_address: string;
+    email: string;
+    password: string;
+};
+
+interface OnChangeArg {
+    nativeEvent: {
+        text: string;
+    };
+}
+
+interface OnChangeReturn {
+    value: string;
+}
+
+const schema = z.object({
+    profile: z.string()
+        .min(1, { message: "Selecione uma opção válida" })
+        .transform((value) => String(value)), // Coerce para string
+    name: z.string()
+        .nonempty('O campo nome é obrigatório'),
+    document: z.string()
+        .nonempty('O campo documento é obrigatório')
+        .min(11, 'O documento deve ter no mínimo 11 caracteres'),
+    full_address: z.string()
+        .nonempty('O campo endereço é obrigatório'),
+    email: z.string()
+        .email('Email inválido')
+        .nonempty('O campo email é obrigatório'),
+    password: z.string()
+        .min(6, 'A senha deve ter no mínimo 6 caracteres')
+        .nonempty('O campo senha é obrigatório'),
+});
 
 
 export default function AddUsers() {
 
-    const [selected, setSelected] = useState("");
+    // Usando Hook from React para criar um estado local
+    const { register, handleSubmit, control, reset, watch, formState: { errors } } = useForm<FormData>({
+        resolver: zodResolver(schema),
+        defaultValues: {
+            profile: '',
+            name: '',
+            document: '',
+            full_address: '',
+            email: '',
+            password: '',
+        }
+    });
 
-    const data = [
-        {key:'Motorista',value:'Motorista'},
-        {key:'Filial',value:'Filial'},
-    ];
+    //observar o valor do campo profile
+    const selectedProfile = watch('profile');
+
+    const onSubmit = (data: FormData) => {
+        console.log(data);
+
+        reset({
+            profile: '',
+            name: '',
+            document: '',
+            full_address: '',
+            email: '',
+            password: ''
+        });
+    };
     
-
+    const onChange = (arg: OnChangeArg): OnChangeReturn => {
+        return {
+            value: arg.nativeEvent.text,
+        };
+    };
+    
+    
     return (
         <KeyboardAvoidingView
             style={globalStyles.container}
             behavior={Platform.OS === "ios" ? "padding" : "height"} // iOS ajusta padding, Android height
             keyboardVerticalOffset={100} // Ajusta o quanto a tela deve "subir"
         >
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+            <ScrollView 
+            contentContainerStyle={{ flexGrow: 1 }}>
                 {/*  tipo de usuario */}
                 <View style={styles.formGroup}>
                     <Text style={styles.label}> Tipo do usuário</Text>
-                    <SelectList 
-                        onSelect={() => {}}
-                        setSelected={setSelected} 
-                        data={data}  
-                        arrowicon={
-                            <FontAwesome 
-                                name="chevron-down" 
-                                size={12} 
-                                color={'black'} />
-                        } 
-                        search={false}
-                        boxStyles={{
-                            borderRadius: 8,
-                            backgroundColor:'#fff',
-                            borderWidth:1,
-                            borderColor:'#ccc',
-                            height: 50,
-                        }} 
-                        inputStyles={{
-                            color: '#aaa',  // Cor do texto
-                            fontSize: 15,   // Tamanho da fonte
-                        }}
-                        dropdownStyles={{
-                            backgroundColor: '#fff',  // Fundo da lista dropdown
-                            borderWidth: 1,
-                            borderColor: '#ccc',
-                            borderRadius: 8,
-                        }}
-                        dropdownTextStyles={{
-                            color: '#333',  // Cor do texto nas opções
-                            fontSize: 16,
-                        }}
-                        defaultOption={{ key:'0', value:'Selecione uma opção' }}   
+                    <Controller
+                        control={control}
+                        name="profile"
+                        rules={{ required: true }}
+                        render={({field: { onChange, onBlur, value }}) => (
+                        <View style={styles.selectContainer}>
+                            <Picker
+                            selectedValue={value}  // Valor selecionado no Picker
+                            onValueChange={(itemValue) => onChange(itemValue)}  // Atualiza o valor no formulário
+                            style={styles.picker}
+                            >
+                                <Picker.Item label="Selecione uma opção" value="" />
+                                <Picker.Item label="Motorista" value="motorista" />
+                                <Picker.Item label="Filial" value="filial" />
+                            </Picker>
+                        </View>
+                        )}  
                     />
+                    { errors.profile && 
+                        <Text style={styles.errorText}>
+                            {errors.profile.message}
+                        </Text>
+                    }
                 </View>
 
                 {/* nome */}
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Nome Completo</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nome completo"
-                        returnKeyType="next"
+                    <Controller
+                        control={control}
+                        name="name"
+                        rules={{ required: true }}
+                        render={({field: { onChange, onBlur, value }}) => (
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nome completo"
+                                returnKeyType="next"
+                                onBlur={onBlur}
+                                onChangeText={value => onChange(value)}
+                                value={value as unknown as string}
+                            />
+                        )}
                     />
+                    { errors.name && 
+                        <Text style={styles.errorText}>
+                            {errors.name.message}
+                        </Text>
+                    }
                 </View>
 
                 {/* documento */}
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>
-                        {(selected === 'Motorista' || selected === '') 
-                        ? 'CPF' : 'CNPJ'}
+                        {selectedProfile === 'motorista' ? 'CPF' : 'CNPJ'}
                     </Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Numero do documento"
-                        keyboardType="numeric"
-                        returnKeyType="next"
+                    <Controller
+                        control={control}
+                        name="document"
+                        rules={{ required: true }}
+                        render={({field: { onChange, onBlur, value }}) => (
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Numero do documento"
+                                keyboardType="numeric"
+                                returnKeyType="next"
+                                onBlur={onBlur}
+                                onChangeText={value => onChange(value)}
+                                value={value as unknown as string}
+                            />
+                        )}
                     />
+                    { errors.document && 
+                        <Text style={styles.errorText}>
+                            {errors.document.message}
+                        </Text>
+                    }
                 </View>
 
                 {/* endereço */}
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Endereço</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Endereço completo"
-                        returnKeyType="next"
+                    <Controller
+                        control={control}
+                        name="full_address"
+                        rules={{ required: true }}
+                        render={({field: { onChange, onBlur, value }}) => (
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Endereço completo"
+                                returnKeyType="next"
+                                onBlur={onBlur}
+                                onChangeText={value => onChange(value)}
+                                value={value as unknown as string}
+                            />
+                        )}  
                     />
+                     { errors.full_address && 
+                        <Text style={styles.errorText}>
+                            {errors.full_address.message}
+                        </Text>
+                    }
                 </View>
 
                 {/* email */}
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>E-mail</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        keyboardType="email-address"
-                        returnKeyType="next"
-                        autoCapitalize="none"
+                    <Controller
+                        control={control}
+                        name="email"
+                        rules={{ required: true }}
+                        render={({field: { onChange, onBlur, value }}) => (
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Email"
+                                keyboardType="email-address"
+                                returnKeyType="next"
+                                autoCapitalize="none"
+                                onBlur={onBlur}
+                                onChangeText={value => onChange(value)}
+                                value={value as unknown as string}
+                            />
+                        )}
                     />
+                     { errors.email && 
+                        <Text style={styles.errorText}>
+                            {errors.email.message}
+                        </Text>
+                    }
                 </View>
 
                 {/* senha */}
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>Senha</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Senha"
-                        secureTextEntry
-                        returnKeyType="done"
+                    <Controller
+                        control={control}
+                        name="password"
+                        rules={{ required: true }}
+                        render={({field: { onChange, onBlur, value }}) => (
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Senha"
+                                secureTextEntry
+                                returnKeyType="done"
+                                onBlur={onBlur}
+                                onChangeText={value => onChange(value)}
+                                value={value as unknown as string}
+                            />
+                        )}
                     />
+                    { errors.password && 
+                        <Text style={styles.errorText}>
+                            {errors.password.message}
+                        </Text>
+                    }
                 </View>
 
                 {/* botao de cadastro */}
@@ -128,7 +262,7 @@ export default function AddUsers() {
                         buttonColor="#fd7e14"
                         icon="check-circle"
                         mode="contained"
-                        onPress={() => {}}
+                        onPress={handleSubmit(onSubmit)}
                     >
                         Cadastrar
                     </Button>
@@ -145,10 +279,25 @@ const styles = StyleSheet.create({
     label: {
         marginBottom: 5,
     },
+    selectContainer: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    picker: {
+        height: 50,
+        width: '100%',
+        backgroundColor: '#fff',
+    },
     input: {
         padding: 10,
         backgroundColor: '#fff',
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
     },
+    errorText: {
+        color: 'red',
+        marginBottom: 10,
+    }
 });
