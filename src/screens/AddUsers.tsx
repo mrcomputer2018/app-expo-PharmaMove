@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import 
-{ View, Text, TextInput, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } 
+{ View, Text, TextInput, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Alert } 
 from 'react-native';
 import { Button } from 'react-native-paper';
 import { globalStyles } from '../styles/globalStyles';
@@ -8,6 +8,8 @@ import {Picker} from '@react-native-picker/picker';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import axios from 'axios';
+import Loading from '../components/Loading';
 
 // Define a custom type for your form data
 type FormData = {
@@ -51,6 +53,8 @@ const schema = z.object({
 
 export default function AddUsers() {
 
+    const [loading, setLoading] = useState(false);
+
     // Usando Hook from React para criar um estado local
     const { register, handleSubmit, control, reset, watch, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
@@ -68,15 +72,31 @@ export default function AddUsers() {
     const selectedProfile = watch('profile');
 
     const onSubmit = (data: FormData) => {
-        console.log(data);
+        
+        axios.post(process.env.REACT_APP_API_URL + '/register', {
+            profile: data.profile,
+            name: data.name,
+            document: data.document,
+            full_address: data.full_address,
+            email: data.email,
+            password: data.password
+        })
+        .then((response) => {
+            console.log(response.data);
+            Alert.alert('Sucesso', 'Usuário cadastrado com sucesso');
 
-        reset({
-            profile: '',
-            name: '',
-            document: '',
-            full_address: '',
-            email: '',
-            password: ''
+            reset({
+                profile: '',
+                name: '',
+                document: '',
+                full_address: '',
+                email: '',
+                password: ''
+            });
+        })
+        .catch((error) => {
+            console.log(error);
+            Alert.alert('Erro', 'Não foi possível cadastrar o usuário');
         });
     };
     
@@ -264,7 +284,7 @@ export default function AddUsers() {
                         mode="contained"
                         onPress={handleSubmit(onSubmit)}
                     >
-                        Cadastrar
+                        {loading ? <Loading size="small" color='#fff'/> : "Cadastrar"}
                     </Button>
                 </View>
             </ScrollView>
