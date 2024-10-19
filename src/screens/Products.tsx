@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, FlatList, StyleSheet, SafeAreaView, TouchableOpacity, Image, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { globalStyles } from '../styles/globalStyles';
 import Empty from '../components/Empty';
 import Loading from '../components/Loading';
 import ListProducts from '../components/ListProducts';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import axios from 'axios';
 
 type Product = {
     product_name: string;
@@ -37,6 +39,39 @@ export default function Products() {
     const [ search, setSearch ] = useState('');
     const [ productsFiltered, setProductsFiltered ] = useState<Product[]>([]);
 
+    useEffect(() => {
+        function getProducts() {
+            setLoading(true);
+
+            axios.get(process.env.EXPO_PUBLIC_API_URL + '/products')
+            .then((response) => {
+                setProducts(response.data);
+                setLoading(false);
+            })
+            .catch( error => {
+                console.log(error);
+                setLoading(false);
+                Alert.alert('Erro', 'Não foi possível carregar os produtos');
+            });
+        }
+
+        getProducts();
+
+    }, []);
+
+    useEffect(() => {
+        if (search === '') {
+            setProductsFiltered(products);
+        } else {
+            setProductsFiltered(
+                products.filter(
+                    (product) => 
+                        product.product_name                    .toLowerCase().includes(search.toLowerCase())
+                )
+            );
+        }
+    }, [search, products]);
+
     return (
         <SafeAreaView style= { globalStyles.container }>
             <View>
@@ -61,7 +96,7 @@ export default function Products() {
 
                 <View>
                     <Text style={ styles.textProductQuantity }>
-                        { products.length } produtos encontrados
+                        { productsFiltered.length } produtos encontrados
                     </Text>
                 </View>
 
@@ -80,11 +115,23 @@ export default function Products() {
                     <Loading size={60} color="#004085" />
                 :
                     <FlatList 
-                        data={ products }
+                        style={ styles.flatListArea}
+                        data={ productsFiltered }
                         keyExtractor={ (item) => item.product_name }
                         renderItem={({ item }) => (
                             <ListProducts data={item}/>
                         )}
+                        numColumns={2}
+                        contentContainerStyle={{
+                            padding: 10,
+                            paddingBottom: 50,
+                            gap: 20,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                        columnWrapperStyle={{
+                            gap: 20,
+                        }}
                         showsVerticalScrollIndicator={ false }
                         ListEmptyComponent={ () => <Empty />}
                     />
@@ -139,5 +186,9 @@ const styles = StyleSheet.create({
     labelViewAll: {
         fontSize: 16,
         color: '#333',
+    },
+    flatListArea: {
+        marginBottom: 10,
+        height: 400,
     }
 });

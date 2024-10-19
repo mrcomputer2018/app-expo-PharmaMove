@@ -18,7 +18,9 @@ export default function ListProducts({data} : ProductProps) {
         <View style={ styles.card }>
             <Image 
             source={{ uri: data.image_url }}
-            style={ styles.productImage }
+            style={[styles.productImage, { 
+                opacity: data.quantity === 0 ? 0.2 : 1 }
+            ]}
             />
             <View style={ styles.areaCardDescription }>
                 <Text style={ styles.productTitle }>
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: '#FFF',
         borderRadius: 16,
-        width: 140,
+        width: 160,
         alignItems: 'center',
         borderColor: '#CCC',
         borderWidth: 1,
@@ -67,6 +69,7 @@ const styles = StyleSheet.create({
     productStore: {
         fontSize: 12,
         color: '#333',
+        textAlign: 'center',
     },
     productArea: {
         flexDirection: 'row',
