@@ -61,6 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setProfile(response.data);
             storeData('@user', response.data);
             storeData('@profile', response.data);
+            console.log(profile);
             setLoading(false);
         })
         .catch((error) => {

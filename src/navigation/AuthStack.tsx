@@ -6,6 +6,7 @@ import Products from "../screens/Products";
 import Movements from "../screens/Movements";
 import Driver from "../screens/Driver";
 import { useAuth } from "../contexts/AuthContext";
+import Loading from "../components/Loading";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,8 +14,12 @@ export default function AuthStack() {
 
     const { profile } = useAuth();
 
+    console.log(">>>>> profile: " + profile);
+
     if (!profile) {
-        return null;
+        return (
+            <Loading size="large" color="#0000ff" />
+        );
     }
     else if(profile.profile === 'admin'){
         return (
