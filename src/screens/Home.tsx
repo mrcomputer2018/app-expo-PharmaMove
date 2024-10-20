@@ -19,7 +19,7 @@ export default function Home({ navigation }: any) {
     }
 
     function handleNavigateToStock() {
-        console.log('Clicou em Estoque');
+        navigation.navigate('Estoque');
     }
 
     return (

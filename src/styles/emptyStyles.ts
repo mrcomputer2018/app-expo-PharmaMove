@@ -4,7 +4,7 @@ export const emptyStyles = StyleSheet.create({
     container: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 200,
+        paddingVertical: 100,
     },
     text: {
         fontSize: 20,
