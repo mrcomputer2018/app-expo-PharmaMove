@@ -29,7 +29,7 @@ export default function Movements({ navigation } : any) {
         }
     ]);
 
-   /*  useEffect(() => {
+    useEffect(() => {
 
         setLoading(true);
 
@@ -48,7 +48,7 @@ export default function Movements({ navigation } : any) {
 
         getMovements(); 
 
-    }, []); */
+    }, []);
 
     function handlenavigateToAddMovement() {
         navigation.navigate('Adicionar Movimentação');
