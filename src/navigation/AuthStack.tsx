@@ -7,6 +7,7 @@ import Movements from "../screens/Movements";
 import Driver from "../screens/Driver";
 import { useAuth } from "../contexts/AuthContext";
 import Loading from "../components/Loading";
+import AddMovement from "../screens/AddMovement";
 
 const Stack = createNativeStackNavigator();
 
@@ -54,6 +55,11 @@ export default function AuthStack() {
                     name="Movimentacoes" 
                     component={Movements}
                     options={{ headerShown: false }}
+                />
+
+                <Stack.Screen 
+                    name="Adicionar Movimentação" 
+                    component={AddMovement}
                 />
             </Stack.Navigator>
         );

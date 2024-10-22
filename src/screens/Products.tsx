@@ -163,7 +163,9 @@ export default function Products() {
                             gap: 20,
                         }}
                         showsVerticalScrollIndicator={ false }
-                        ListEmptyComponent={ () => <Empty />}
+                        ListEmptyComponent={ 
+                            () => <Empty message="Nemhum produto encontrado."/>
+                        }
                     />
                 }
             </View>
