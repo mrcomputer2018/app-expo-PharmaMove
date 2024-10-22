@@ -58,7 +58,6 @@ export default function AuthStack() {
                 <Stack.Screen 
                     name="Adicionar Movimentação" 
                     component={AddMovement}
-                    options={{ headerShown: false }} 
                 />
             </Stack.Navigator>
         );

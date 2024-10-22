@@ -63,7 +63,7 @@ export default function AddMovement() {
                             marginTop: 30,
                         } 
                     ]}>
-                        Adicionando Movimentação
+                        Movimentação
                     </Text>
                 </View>
 
