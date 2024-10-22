@@ -96,7 +96,7 @@ export default function Users({ navigation }: any) {
                         <ListUsers item={item} action={handleSwitch}/>
                     )}
                     ListEmptyComponent={
-                        () => <Empty />
+                        () => <Empty message="Nenhum usuário encontrado."/>
                     }
                     showsVerticalScrollIndicator={false}
                 />           

@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../contexts/AuthContext';
 import Loading from '../components/Loading';
 
+
 const schema = z.object({
     email: z
         .string()
