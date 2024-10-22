@@ -21,4 +21,33 @@ export const globalStyles = StyleSheet.create({
     formGroup: {
         marginBottom: 20,
     },
+    title: {
+        fontSize: 20,
+        fontWeight: "bold",
+        marginBottom: 20,
+    },
+    label: {
+        marginBottom: 5,
+    },
+    selectContainer: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        overflow: 'hidden',
+    },
+    picker: {
+        height: 50,
+        width: '100%',
+        backgroundColor: '#fff',
+    },
+    input: {
+        padding: 10,
+        backgroundColor: '#fff',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    },
+    errorText: {
+        color: 'red',
+        marginBottom: 10,
+    }
 });

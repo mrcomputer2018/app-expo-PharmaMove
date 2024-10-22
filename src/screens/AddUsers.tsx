@@ -130,7 +130,7 @@ export default function AddUsers() {
                             <Picker
                             selectedValue={value}  // Valor selecionado no Picker
                             onValueChange={(itemValue) => onChange(itemValue)}  // Atualiza o valor no formulário
-                            style={styles.picker}
+                            style={globalStyles.picker}
                             >
                                 <Picker.Item label="Selecione uma opção" value="" />
                                 <Picker.Item label="Motorista" value="motorista" />
@@ -201,7 +201,7 @@ export default function AddUsers() {
 
                 {/* endereço */}
                 <View style={styles.formGroup}>
-                    <Text style={styles.label}>Endereço</Text>
+                    <Text style={globalStyles.label}>Endereço</Text>
                     <Controller
                         control={control}
                         name="full_address"
