@@ -66,7 +66,7 @@ export default function AuthStack() {
         return (
             <Stack.Navigator initialRouteName="Motorista">
                 <Stack.Screen 
-                    name="Motorita" 
+                    name="Motorista" 
                     component={Driver}
                     options={{ headerShown: false }} 
                 />

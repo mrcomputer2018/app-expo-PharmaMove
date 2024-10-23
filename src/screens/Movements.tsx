@@ -23,6 +23,7 @@ export interface IMovement {
     origem: {
         nome: string;
     };
+    quantidade: number;
     destino: {
         nome: string;
     };

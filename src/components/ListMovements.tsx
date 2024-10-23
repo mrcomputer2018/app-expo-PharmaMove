@@ -17,7 +17,7 @@ export default function ListMovements({ item }: ListMovementsProps) {
 
             <View>
                 <Text style={ styles.textProduct }>
-                    {item.produto.nome}
+                    {item.produto.nome} - { item.quantidade } unidade(s)
                 </Text>
                 <View style={ styles.description }>
                     <Text style={ styles.text }>Ordem n.º:</Text>
