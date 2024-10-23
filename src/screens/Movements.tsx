@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { View, Text, Alert, SafeAreaView, FlatList, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
@@ -11,40 +11,54 @@ import { Button, List } from 'react-native-paper';
 import Header from '../components/Header';
 import Empty from '../components/Empty';
 import ListMovements from '../components/ListMovements';
+import { useFocusEffect } from '@react-navigation/native';
 
+export interface IMovement {
+    id: number;
+    produto: {
+        nome: string;
+        imagem: string;
+    };
+    origem: {
+        nome: string;
+    };
+    destino: {
+        nome: string;
+    };
+    status: string;
+}
 
 export default function Movements({ navigation } : any) {
 
     const { user, signOut } = useAuth();
 
     const [loading, setLoading] = useState(false);
-    const  [movements, setMovements] = useState([
-        {
-            movement_id: 1,
-            origin_name: 'Farmácia Saúde SP',
-            destination_name: 'Farmácia Bem-Estar CE',
-            product_name: 'Paracetamol 500mg',
-            status: 'Aguardando coleta',
-            imgUrl: 'https://drogariasp.vteximg.com.br/arquivos/ids/759950-1000-1000/10227---paracetamol-750mg-20-comprimidos-generico-1.jpg?v=637980224448970000'
-        }
-    ]);
+    const  [movements, setMovements] = useState<IMovement[]>([]);
+
+
+    function getMovements() {
+        axios.get(process.env.EXPO_PUBLIC_API_URL + '/movements')  
+        .then((response) => {
+            setMovements(response.data);
+            setLoading(false);
+        })
+        .catch((error) => {
+            console.error(error);
+            setLoading(false);
+            Alert.alert('Error', 'Erro ao buscar movimentações.');
+        });
+    }
+
+    // Atualiza a lista de movimentações toda vez que a tela é focada
+    useFocusEffect(
+        useCallback(() => {
+            getMovements();
+        }, [])
+      );
 
     useEffect(() => {
 
         setLoading(true);
-
-        function getMovements() {
-            axios.get(process.env.EXPO_PUBLIC_API_URL + '/movements')  
-            .then((response) => {
-                setMovements(response.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error(error);
-                setLoading(false);
-                Alert.alert('Error', 'Erro ao buscar movimentações.');
-            });
-        }
 
         getMovements(); 
 
@@ -83,8 +97,8 @@ export default function Movements({ navigation } : any) {
 
                 <FlatList
                     data={movements}
-                    keyExtractor={ item => item.movement_id.toString() }
-                    renderItem={({ item }) => (
+                    keyExtractor={ item => item.id.toString() }
+                    renderItem={({ item }: { item: IMovement }) => (
                         <ListMovements item={item} />
                     )}
                     showsVerticalScrollIndicator={false}
