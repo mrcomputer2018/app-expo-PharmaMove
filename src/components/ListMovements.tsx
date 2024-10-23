@@ -1,26 +1,36 @@
 import { View, Text, Image } from 'react-native';
 import { listMovementsStyles as styles } from '../styles/listMovementsStyles';
 
-export default function ListMovements({ item }: any) {
+import { IMovement } from '../screens/Movements';
+
+type ListMovementsProps = {
+        item: IMovement;
+}
+
+export default function ListMovements({ item }: ListMovementsProps) {
     return (
         <View style={ styles.card }>
             <Image 
                 style={ styles.image }
-                source={{ uri: item.imgUrl }}
+                source={{ uri: item.produto.imagem }}
             />
 
             <View>
                 <Text style={ styles.textProduct }>
-                    {item?.product_name}
+                    {item.produto.nome}
                 </Text>
                 <View style={ styles.description }>
+                    <Text style={ styles.text }>Ordem n.º:</Text>
+                    <Text>{item.id}</Text>
+                </View>
+                <View style={ styles.description }>
                     <Text style={ styles.text }>Origem:</Text>
-                    <Text>{item.origin_name}</Text>
+                    <Text>{item.origem.nome}</Text>
                 </View>
 
                 <View style={ styles.description }>
                     <Text style={ styles.text }>Destino:</Text>
-                    <Text>{item?.destination_name}</Text>
+                    <Text>{item.destino.nome}</Text>
                 </View>
                 
                 <View style={ styles.areaStatus }>

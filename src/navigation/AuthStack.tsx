@@ -15,8 +15,6 @@ export default function AuthStack() {
 
     const { profile } = useAuth();
 
-    console.log(">>>>> profile: " + profile);
-
     if (!profile) {
         return (
             <Loading size="large" color="#0000ff" />
