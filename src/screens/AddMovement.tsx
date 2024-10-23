@@ -1,12 +1,29 @@
-import { useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView, TextInput } from 'react-native';
+import { useEffect, useState } from 'react';
+import { View, Text, KeyboardAvoidingView, Platform, ScrollView, TextInput, Alert } from 'react-native';
 import { z } from 'zod';
 import { Picker } from '@react-native-picker/picker';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, set, useForm } from 'react-hook-form';
 import { globalStyles } from '../styles/globalStyles';
+import axios from 'axios';
+
 import { Button } from 'react-native-paper';
 import Loading from '../components/Loading';
+
+type Branch = {
+    id: number;
+    latitude: number;
+    longitude: number;
+    location: string;
+    name: string;
+}
+
+type Product = {
+    branch_id: number;
+    branch_name: string;
+    product_id: number;
+    quantity: number;
+}
 
 type FormData = {
     originBranchId: number;
@@ -17,14 +34,36 @@ type FormData = {
 };
 
 const schema = z.object({
-    originBranchId: z.string()
-        .min(1, { message: "Selecione uma opção válida" })
-        .transform((value) => String(value)), // Coerce para string
+    originBranchId: z.number()
+        .int()
+        .positive("Selecione uma filial de destino")
+        .refine(value => value > 0, {
+            message: "Selecione uma filial de origem",
+        }),
+    destinationBranchId: z.number()
+        .int()
+        .positive("Selecione uma filial de destino")
+        .refine(value => value > 0, {
+            message: "Selecione uma filial de destino",
+        }),
+    productId: z.number()
+        .int()
+        .positive("Selecione um produto")
+        .refine(value => value > 0, {
+            message: "Selecione um produto",
+        }),
+    quantity: z.coerce.number()
+        .int()
+        .positive("Digite uma quantidade"),
+    observation: z.string()
+        .nonempty("Digite uma observação"),
 });
 
 export default function AddMovement() {
 
     const [ loading, setLoading ] = useState(false);
+    const [ branches, setBranches ] = useState<Branch[]>([]);
+    const [ products, setProducts ] = useState<Product[]>([]);
 
     const { register, handleSubmit, control, reset, watch, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
@@ -33,6 +72,7 @@ export default function AddMovement() {
             destinationBranchId: 0,
             productId: 0,
             quantity: 0,
+            observation: '',
         }
     });
 
@@ -48,8 +88,92 @@ export default function AddMovement() {
         };
     };
 
+    useEffect(() => {
+        function getBranchs() {
+            setLoading(true);
+
+            // Lógica para buscar as filiais
+            axios.get(process.env.EXPO_PUBLIC_API_URL + '/branches/options')
+            .then((response) => {
+                setLoading(false);
+                setBranches(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+                setLoading(false);
+                Alert.alert("Error","Erro ao buscar filiais");
+            });
+        }
+
+        getBranchs();
+
+    }, []);
+
+    useEffect(() => {
+        setLoading(true);
+
+        function getProducts() {
+            // Lógica para buscar as produtos
+            axios.get(process.env.EXPO_PUBLIC_API_URL + '/products/options')
+            .then((response) => {
+                setProducts(response.data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error(error);
+                setLoading(false);
+                Alert.alert("Error","Erro ao buscar produtos");
+            });
+        }
+
+        getProducts();
+        
+    }, []);
+
     const onSubmit = (data: FormData) => {
-        console.log(data);
+       //verificando se a filial de origem é a mesma da filial de destino
+        if(data.originBranchId === data.destinationBranchId) {
+            Alert.alert("Atenção", "A filial de origem não pode ser a mesma da filial de destino");
+            return;
+        }
+       
+        //selecionando o produto e a filial desejada
+        const product = products.find((product) => 
+            product.branch_id === data.originBranchId &&
+            product.product_id === data.productId
+        );
+
+        //verificando se o produto esta disponivel na filial
+        if(!product) {
+            Alert.alert("Atenção", "Produto não esta disponivel nesta filial");
+            return;
+        }
+
+        //verificando se a quantidade desejada é maior que a quantidade disponivel
+        if(data.quantity > product.quantity) {
+            Alert.alert("Atenção", "A quantidade excede a quantidade disponivel");
+            return;
+        }
+
+        setLoading(true);
+
+        axios.post(process.env.EXPO_PUBLIC_API_URL + '/movements', {
+            originBranchId: data.originBranchId,
+            destinationBranchId: data.destinationBranchId,
+            productId: data.productId,
+            quantity: data.quantity,
+        })
+        .then((response) => {
+            console.log(">>> POST /movements" + response.data);
+            Alert.alert("Sucesso","Movimentação cadastrada com sucesso");
+            reset();
+            setLoading(false);
+        })
+        .catch((error) => {
+            console.error(error);
+            Alert.alert("Error","Erro ao cadastrar movimentação");
+            setLoading(false);
+        });
     }
 
     return (
@@ -82,14 +206,13 @@ export default function AddMovement() {
                             style={globalStyles.picker}
                             >
                                 <Picker.Item label="Selecione uma opção" value="" />
-                                <Picker.Item 
-                                    label="Farmácia Saúde SP" 
-                                    value="Farmácia Saúde SP" 
-                                />
-                                <Picker.Item 
-                                    label="Farmácia Bem-Estar CE" 
-                                    value="Farmácia Bem-Estar CE" 
-                                />
+                                {branches.map((branch) => ( 
+                                    <Picker.Item 
+                                        key={branch.id} 
+                                        label={branch.name} 
+                                        value={branch.id} 
+                                    />
+                                ))}
                             </Picker>
                         </View>
                         )}  
@@ -116,14 +239,13 @@ export default function AddMovement() {
                             style={globalStyles.picker}
                             >
                                 <Picker.Item label="Selecione uma opção" value="" />
-                                <Picker.Item 
-                                    label="Farmácia Saúde SP" 
-                                    value="Farmácia Saúde SP" 
-                                />
-                                <Picker.Item 
-                                    label="Farmácia Bem-Estar CE" 
-                                    value="Farmácia Bem-Estar CE" 
-                                />
+                                {branches.map((branch) => ( 
+                                    <Picker.Item 
+                                        key={branch.id} 
+                                        label={branch.name} 
+                                        value={branch.id} 
+                                    />
+                                ))}
                             </Picker>
                         </View>
                         )}  
@@ -150,14 +272,13 @@ export default function AddMovement() {
                             style={globalStyles.picker}
                             >
                                 <Picker.Item label="Selecione uma opção" value="" />
-                                <Picker.Item 
-                                    label="Farmácia Saúde SP" 
-                                    value="Farmácia Saúde SP" 
-                                />
-                                <Picker.Item 
-                                    label="Farmácia Bem-Estar CE" 
-                                    value="Farmácia Bem-Estar CE" 
-                                />
+                                {products.map((product) => ( 
+                                    <Picker.Item 
+                                        key={product.product_id} 
+                                        label={product.product_id.toString()} 
+                                        value={product.product_id} 
+                                    />
+                                ))}
                             </Picker>
                         </View>
                         )}  
