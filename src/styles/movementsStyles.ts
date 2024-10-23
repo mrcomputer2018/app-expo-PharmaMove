@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const movementsStyles = StyleSheet.create({
     areaViewHeader: {
-        marginTop: 26,
+        marginTop: 24,
     },
     container: {
         padding: 20,
@@ -15,5 +15,8 @@ export const movementsStyles = StyleSheet.create({
     buttonMovements: {
         marginBottom: 30,
         marginTop: 20,
+    },
+    listMovements: {
+        height: 530,
     }
 });

@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 export const listMovementsStyles = StyleSheet.create({
     card: {
         flexDirection: 'row',
+       alignItems: 'center',
         padding: 10,
         margin: 10,
         backgroundColor: 'white',
@@ -14,8 +15,10 @@ export const listMovementsStyles = StyleSheet.create({
         elevation: 5,
     },
     image: {
-        width: 80,
+        width: 100,
         height: 100,
+        borderRightWidth: 1,
+        borderColor: '#ccc',
     },
     textProduct: {
         fontSize: 16,

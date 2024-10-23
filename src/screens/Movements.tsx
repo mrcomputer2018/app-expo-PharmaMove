@@ -12,6 +12,7 @@ import Header from '../components/Header';
 import Empty from '../components/Empty';
 import ListMovements from '../components/ListMovements';
 import { useFocusEffect } from '@react-navigation/native';
+import Loading from '../components/Loading';
 
 export interface IMovement {
     id: number;
@@ -50,11 +51,7 @@ export default function Movements({ navigation } : any) {
     }
 
     // Atualiza a lista de movimentações toda vez que a tela é focada
-    useFocusEffect(
-        useCallback(() => {
-            getMovements();
-        }, [])
-      );
+  
 
     useEffect(() => {
 
@@ -69,7 +66,10 @@ export default function Movements({ navigation } : any) {
     }
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ 
+                flex:1,
+                paddingBottom: 80 
+            }}>
             <StatusBar style="light"  backgroundColor='#004085'/>
             
             <View style={ styles.areaViewHeader}>
@@ -94,18 +94,25 @@ export default function Movements({ navigation } : any) {
                 <Text style={ styles.titleMovement }>
                     Movimentações
                 </Text>
-
-                <FlatList
-                    data={movements}
-                    keyExtractor={ item => item.id.toString() }
-                    renderItem={({ item }: { item: IMovement }) => (
-                        <ListMovements item={item} />
-                    )}
-                    showsVerticalScrollIndicator={false}
-                    ListEmptyComponent={
-                        <Empty message="Nenhuma movimentação encontrada." />
-                    }
-                />
+                { loading ? 
+                    <Loading size={60} color="#004085" /> 
+                    :
+                    <FlatList
+                        style={ styles.listMovements }
+                        data={movements}
+                        keyExtractor={ item => item.id.toString() }
+                        renderItem={({ item }: { item: IMovement }) => (
+                            <ListMovements item={item} />
+                        )}
+                        showsVerticalScrollIndicator={false}
+                        ListEmptyComponent={
+                            <Empty message="Nenhuma movimentação encontrada." />
+                        }
+                        contentContainerStyle={{ 
+                            paddingBottom: 10,
+                        }}
+                    />
+                }
             </View>
         </SafeAreaView>
     );

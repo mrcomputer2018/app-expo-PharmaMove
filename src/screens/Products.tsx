@@ -153,7 +153,6 @@ export default function Products() {
                         )}
                         numColumns={2}
                         contentContainerStyle={{
-
                             paddingBottom: 30,
                             gap: 20,
                             justifyContent: 'center',

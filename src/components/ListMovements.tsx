@@ -20,6 +20,10 @@ export default function ListMovements({ item }: ListMovementsProps) {
                     {item.produto.nome}
                 </Text>
                 <View style={ styles.description }>
+                    <Text style={ styles.text }>Ordem n.º:</Text>
+                    <Text>{item.id}</Text>
+                </View>
+                <View style={ styles.description }>
                     <Text style={ styles.text }>Origem:</Text>
                     <Text>{item.origem.nome}</Text>
                 </View>
