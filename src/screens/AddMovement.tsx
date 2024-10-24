@@ -21,6 +21,7 @@ type Branch = {
 type Product = {
     branch_id: number;
     branch_name: string;
+    product_name: string;
     product_id: number;
     quantity: number;
 }
@@ -275,7 +276,7 @@ export default function AddMovement() {
                                 {products.map((product) => ( 
                                     <Picker.Item 
                                         key={product.product_id} 
-                                        label={product.product_id.toString()} 
+                                        label={product.product_name} 
                                         value={product.product_id} 
                                     />
                                 ))}

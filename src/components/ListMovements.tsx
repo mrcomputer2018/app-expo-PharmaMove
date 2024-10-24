@@ -15,9 +15,9 @@ export default function ListMovements({ item }: ListMovementsProps) {
                 source={{ uri: item.produto.imagem }}
             />
 
-            <View>
+            <View  style={ styles.areaDetails }>
                 <Text style={ styles.textProduct }>
-                    {item.produto.nome} - { item.quantidade } unidade(s)
+                    {item.produto.nome} - { item.quantidade } unid(s)
                 </Text>
                 <View style={ styles.description }>
                     <Text style={ styles.text }>Ordem n.º:</Text>
