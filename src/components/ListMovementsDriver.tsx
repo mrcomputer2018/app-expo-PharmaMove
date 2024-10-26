@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import { View, Text, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Alert, SafeAreaView } from 'react-native';
 import { Button, ProgressBar } from 'react-native-paper';
 import { IMovement } from '../screens/Movements';
 import { globalStyles } from '../styles/globalStyles';
 import Loading from './Loading';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../contexts/AuthContext';
 
 type ListMovementsDriverProps = {
-    item: IMovement
+    item: IMovement;
+    getMovements: () => void;
 }
 
 type MyImage = {
@@ -18,11 +19,19 @@ type MyImage = {
     name: string
 }
 
-export default function ListMovementsDriver({ item }: ListMovementsDriverProps, { navigation }: any) {
+type AuthContextData = {
+    user: {
+        name: string;
+    } | null;
+};
+
+export default function ListMovementsDriver({ item, getMovements }: ListMovementsDriverProps, { navigation }: any) {
+    
+    const { user } = useAuth() as AuthContextData;
 
     const [ loadingDelivery, setLoadingDelivery ] = useState(false);
     const [ loadingMap, setLoadingMap ] = useState(false);
-    const [currentStatus, setCurrentStatus] = useState("created");
+    const [currentStatus, setCurrentStatus] = useState(item.status);
 
     async function getImageCamera() {
         const permission = await ImagePicker.requestCameraPermissionsAsync()
@@ -52,12 +61,12 @@ export default function ListMovementsDriver({ item }: ListMovementsDriverProps, 
         const data: any =  {
             uri: myImage,
         }
-
+        
         const formData = new FormData();
        
         formData.append('file', myImage as any);
 
-        formData.append('motorista', 'Guilherme Silva');
+        formData.append('motorista', user ? user.name : '');
 
         axios.put(process.env.EXPO_PUBLIC_API_URL + `/movements/${item.id}/start`, formData, {
             headers: {
@@ -66,6 +75,7 @@ export default function ListMovementsDriver({ item }: ListMovementsDriverProps, 
         })
         .then((response) => {
             console.log("DEU BOM NO UPLOAD");
+            getMovements();
             Alert.alert("Sucesso","Entrega iniciada com sucesso!");
         })
         .catch((error) => {
@@ -92,6 +102,7 @@ export default function ListMovementsDriver({ item }: ListMovementsDriverProps, 
         })
         .then((response) => {
             console.log("DEU BOM NO UPLOAD");
+            getMovements();
             Alert.alert("Sucesso","Entrega iniciada com sucesso!");
         })
         .catch((error) => {
@@ -120,14 +131,16 @@ export default function ListMovementsDriver({ item }: ListMovementsDriverProps, 
         const myImage = await getImageCamera();
 
         if (myImage) {
-            await updateDatabase(item, myImage);
+            await updateDatabaseFinalize(item, myImage);
         }
 
         setLoadingDelivery(false);
     }
     
     return (
-        <View style={ styles.container}>
+        <SafeAreaView style={{ ...styles.container, 
+        backgroundColor: currentStatus === "created" ? 
+        '#f2f2f2' : currentStatus === "em transito" ? '#fff3cd' : '#d4edda' }}>
             <View style={ styles.areaDetails }>
                 <Image 
                     source={{ uri: item.produto.imagem }}
@@ -274,14 +287,13 @@ export default function ListMovementsDriver({ item }: ListMovementsDriverProps, 
                         }
                     </Button>
                 </View>
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f7f8fa',
         padding: 20,
         marginVertical: 8,
         borderRadius: 10,
