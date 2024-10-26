@@ -57,10 +57,6 @@ export default function ListMovementsDriver({ item, getMovements }: ListMovement
     }
 
     async function updateDatabase(item: IMovement, myImage: MyImage) { 
-
-        const data: any =  {
-            uri: myImage,
-        }
         
         const formData = new FormData();
        
@@ -85,9 +81,6 @@ export default function ListMovementsDriver({ item, getMovements }: ListMovement
     }
 
     async function updateDatabaseFinalize(item: IMovement, myImage: MyImage) {
-        const data: any =  {
-            uri: myImage,
-        }
 
         const formData = new FormData();
        
@@ -118,7 +111,7 @@ export default function ListMovementsDriver({ item, getMovements }: ListMovement
         const myImage = await getImageCamera();
 
         if (myImage) {
-            await updateDatabaseFinalize(item, myImage);
+            await updateDatabase(item, myImage);
         }
 
         setLoadingDelivery(false);
@@ -273,20 +266,25 @@ export default function ListMovementsDriver({ item, getMovements }: ListMovement
                         </Button> )
                     }
 
-                    <Button
-                        style={ [globalStyles.button, { marginTop: 10 }] }
-                        labelStyle={{ fontSize: 16 }}
-                        buttonColor="gray"
-                        icon={ loadingMap ? '' : 'check-circle' }
-                        mode="contained"
-                        onPress={() => navigation.navigate("Mapa")}
-                    >
-                        {loadingMap ? <
-                            Loading size="small" color='#fff'/> : 
-                            "Mapa"
-                        }
-                    </Button>
-                </View>
+                    {   currentStatus === "created" || 
+                        currentStatus === "em transito" && (
+                        <Button
+                            style={ [globalStyles.button, { marginTop: 10 }] }
+                            labelStyle={{ fontSize: 16 }}
+                            buttonColor="gray"
+                            icon={ loadingMap ? '' : 'check-circle' }
+                            mode="contained"
+                            onPress={() => navigation.navigate("Mapa")}
+                        >
+                            {
+                                loadingMap ? <
+                                Loading size="small" color='#fff'/> : 
+                                "Mapa"
+                            }
+                        </Button>)
+                    }
+            </View>
+            
         </SafeAreaView>
     );
 }
