@@ -8,8 +8,10 @@ import { User } from '../components/Header';
 import Header from '../components/Header';
 import ListMovementsDriver from '../components/ListMovementsDriver';
 import { globalStyles } from '../styles/globalStyles';
+import Empty from '../components/Empty';
+import Loading from '../components/Loading';
 
-export default function Driver() {
+export default function Driver({ navigation }: any) {
 
     const { user, signOut } = useAuth();
     const [loading, setLoading] = useState(false);
@@ -17,6 +19,9 @@ export default function Driver() {
 
 
     function getMovements() {
+
+        setLoading(true);
+
         axios.get(process.env.EXPO_PUBLIC_API_URL + '/movements')  
         .then((response) => {
             setMovements(response.data);
@@ -30,7 +35,6 @@ export default function Driver() {
     }
 
     useEffect(() => {
-        setLoading(true);
         getMovements();
     }, []);
 
@@ -50,15 +54,30 @@ export default function Driver() {
             }}>
                 <Text style={ globalStyles.title }>
                     Movimentações
-                </Text>
-                
-                <FlatList 
-                    data={movements}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <ListMovementsDriver item={item} />
-                    )}
-                />
+                </Text>           
+    
+                { 
+                    loading 
+                    ? 
+                    <Loading size={48} color='#004085'/> 
+                    :
+                    <FlatList 
+                        data={movements}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <ListMovementsDriver 
+                                item={item} 
+                            />
+                        )}
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ 
+                            paddingBottom: 20,
+                        }}
+                        ListEmptyComponent={
+                            <Empty message="Nenhuma movimentação encontrada." />
+                        }
+                    />
+                }
             </View>
             
         </SafeAreaView>
