@@ -2,6 +2,7 @@ import { View, Text, Image } from 'react-native';
 import { listMovementsStyles as styles } from '../styles/listMovementsStyles';
 
 import { IMovement } from '../screens/Movements';
+import { globalStyles } from '../styles/globalStyles';
 
 type ListMovementsProps = {
         item: IMovement;
@@ -15,9 +16,9 @@ export default function ListMovements({ item }: ListMovementsProps) {
                 source={{ uri: item.produto.imagem }}
             />
 
-            <View>
-                <Text style={ styles.textProduct }>
-                    {item.produto.nome}
+            <View  style={ styles.areaDetails }>
+                <Text style={ globalStyles.textProduct }>
+                    {item.produto.nome} - { item.quantidade } unid(s)
                 </Text>
                 <View style={ styles.description }>
                     <Text style={ styles.text }>Ordem n.º:</Text>

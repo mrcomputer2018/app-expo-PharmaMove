@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, Alert, SafeAreaView, FlatList, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
@@ -11,10 +11,10 @@ import { Button, List } from 'react-native-paper';
 import Header from '../components/Header';
 import Empty from '../components/Empty';
 import ListMovements from '../components/ListMovements';
-import { useFocusEffect } from '@react-navigation/native';
 import Loading from '../components/Loading';
 
 export interface IMovement {
+    route: any;
     id: number;
     produto: {
         nome: string;
@@ -23,10 +23,15 @@ export interface IMovement {
     origem: {
         nome: string;
     };
+    quantidade: number;
     destino: {
         nome: string;
     };
     status: string;
+    historico: {
+        data: string;
+        descricao: string;
+    }
 }
 
 export default function Movements({ navigation } : any) {
@@ -51,7 +56,13 @@ export default function Movements({ navigation } : any) {
     }
 
     // Atualiza a lista de movimentações toda vez que a tela é focada
-  
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            getMovements();
+        });
+
+        return unsubscribe;
+    }, [navigation]);
 
     useEffect(() => {
 
@@ -102,7 +113,8 @@ export default function Movements({ navigation } : any) {
                         data={movements}
                         keyExtractor={ item => item.id.toString() }
                         renderItem={({ item }: { item: IMovement }) => (
-                            <ListMovements item={item} />
+                            <ListMovements 
+                            item={item} />
                         )}
                         showsVerticalScrollIndicator={false}
                         ListEmptyComponent={

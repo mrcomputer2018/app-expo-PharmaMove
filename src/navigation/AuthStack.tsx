@@ -8,6 +8,7 @@ import Driver from "../screens/Driver";
 import { useAuth } from "../contexts/AuthContext";
 import Loading from "../components/Loading";
 import AddMovement from "../screens/AddMovement";
+import Map from "../screens/Map";
 
 const Stack = createNativeStackNavigator();
 
@@ -66,9 +67,14 @@ export default function AuthStack() {
         return (
             <Stack.Navigator initialRouteName="Motorista">
                 <Stack.Screen 
-                    name="Motorita" 
+                    name="Motorista" 
                     component={Driver}
                     options={{ headerShown: false }} 
+                />
+
+                <Stack.Screen 
+                    name="Mapa" 
+                    component={Map}
                 />
             </Stack.Navigator>
         );
