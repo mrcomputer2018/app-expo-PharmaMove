@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import {View, Text, FlatList, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FlatList, StyleSheet, SafeAreaView } from 'react-native';
 import axios from 'axios';
 
-import { Feather } from '@expo/vector-icons';
 import { globalStyles } from '../styles/globalStyles';
 import ListUsers from '../components/ListUsers';
 import Loading from '../components/Loading';
 import Empty from '../components/Empty';
 import { Button } from 'react-native-paper';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 type User = { 
@@ -32,6 +32,13 @@ export default function Users({ navigation }: any) {
             getUsers();
     
     }, [setLoading]);
+
+    // Recarregar os dados sempre que a tela ganha foco
+    useFocusEffect(
+        useCallback(() => {
+            getUsers();
+        }, [])
+    );
 
     // Função para buscar usuários
     function getUsers() {
