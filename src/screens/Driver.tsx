@@ -10,7 +10,6 @@ import ListMovementsDriver from '../components/ListMovementsDriver';
 import { globalStyles } from '../styles/globalStyles';
 import Empty from '../components/Empty';
 import Loading from '../components/Loading';
-import { StatusBar } from 'expo-status-bar';
 
 export default function Driver({ navigation }: any) {
 

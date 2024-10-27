@@ -34,9 +34,14 @@ export default function ListMovements({ item }: ListMovementsProps) {
                     <Text>{item.destino.nome}</Text>
                 </View>
                 
-                <View style={ styles.areaStatus }>
-                    <Text style={ styles.textStatus }>
-                        {item.status}
+                <View style={ styles.areaStatus}>
+                    <Text style={{ 
+                        ...styles.textStatus,
+                        backgroundColor: item.status === "created" ? 
+                        'red' : item.status === "em transito" ? 
+                        '#ffc107' : '#28a745'
+                    }}>
+                        {item.status === "created" ? 'Aguardando coleta' : item.status === "em transito" ? 'Em trânsito' : item.status}
                     </Text>
                 </View>
             </View>
