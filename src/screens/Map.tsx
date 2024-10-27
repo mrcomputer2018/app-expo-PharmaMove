@@ -12,6 +12,7 @@ export default function Map(props: IMovement) {
     
     const [latitude, setLatitude] = useState(origem.latitude)
     const [longitude, setLongitude] = useState(origem.longitude)
+    
 
     return (
         <SafeAreaView style={styles.container}>
