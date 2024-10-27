@@ -7,12 +7,11 @@ import ActivityIndicator from "react-native-paper/src/components/ActivityIndicat
 
 export default function Map(props: IMovement) {
 
-    console.log('Map',props.route.params.item.destino)
     const { origem } = props.route.params.item
     const { destino } = props.route.params.item
     
-    const [latitude, setLatitude] = useState(destino.latitude)
-    const [longitude, setLongitude] = useState(destino.longitude)
+    const [latitude, setLatitude] = useState(0)
+    const [longitude, setLongitude] = useState(0)
 
     return (
         <SafeAreaView style={styles.container}>
@@ -64,8 +63,10 @@ export default function Map(props: IMovement) {
                 ) : 
                 (
                     <View>
-                        <ActivityIndicator />
-                        <Text>Carregando...</Text>
+                        <ActivityIndicator size={48} color='#004085'/>
+                        <Text style={ styles.textLoading }>
+                            Carregando...
+                        </Text>
                     </View>
                 )
             }
@@ -80,7 +81,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    loading: {  
-
+    textLoading: {  
+        marginTop: 10,
+        fontSize: 18,
+        color: '#004085',
+        fontWeight: 'bold'
     }
 });
