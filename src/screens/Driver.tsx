@@ -39,6 +39,10 @@ export default function Driver({ navigation }: any) {
         getMovements();
     }, []);
 
+    function handleNavigateToMap(item: IMovement) {
+        navigation.navigate('Mapa', { item });
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             
@@ -68,9 +72,7 @@ export default function Driver({ navigation }: any) {
                         renderItem={({ item }) => (
                             <ListMovementsDriver 
                                 item={item}
-                               /*  onPress={
-                                    () => navigation.navigate('Movements', { item })
-                                }  */
+                                handleNavigateToMap={handleNavigateToMap}
                                 getMovements={getMovements}
                             />
                         )}

@@ -10,7 +10,8 @@ import { useAuth } from '../contexts/AuthContext';
 
 type ListMovementsDriverProps = {
     item: IMovement;
-    getMovements: () => void;
+    getMovements?: () => void;
+    handleNavigateToMap?: (item: IMovement) => void;
 }
 
 type MyImage = {
@@ -25,13 +26,13 @@ type AuthContextData = {
     } | null;
 };
 
-export default function ListMovementsDriver({ item, getMovements }: ListMovementsDriverProps, { navigation }: any) {
+export default function ListMovementsDriver({ item, getMovements, handleNavigateToMap }: ListMovementsDriverProps, { navigation }: any) {
     
     const { user } = useAuth() as AuthContextData;
 
     const [ loadingDelivery, setLoadingDelivery ] = useState(false);
     const [ loadingMap, setLoadingMap ] = useState(false);
-    const [currentStatus, setCurrentStatus] = useState(item.status);
+    const [currentStatus, setCurrentStatus] = useState("created");
 
     async function getImageCamera() {
         const permission = await ImagePicker.requestCameraPermissionsAsync()
@@ -71,7 +72,7 @@ export default function ListMovementsDriver({ item, getMovements }: ListMovement
         })
         .then((response) => {
             console.log("DEU BOM NO UPLOAD");
-            getMovements();
+            getMovements?.();
             Alert.alert("Sucesso","Entrega iniciada com sucesso!");
         })
         .catch((error) => {
@@ -95,7 +96,7 @@ export default function ListMovementsDriver({ item, getMovements }: ListMovement
         })
         .then((response) => {
             console.log("DEU BOM NO UPLOAD");
-            getMovements();
+            getMovements?.();
             Alert.alert("Sucesso","Entrega iniciada com sucesso!");
         })
         .catch((error) => {
@@ -266,22 +267,45 @@ export default function ListMovementsDriver({ item, getMovements }: ListMovement
                         </Button> )
                     }
 
-                    {   currentStatus === "created" || 
-                        currentStatus === "em transito" && (
+                    {/* mapa */}
+                    {   currentStatus === "created"
+                         && 
                         <Button
                             style={ [globalStyles.button, { marginTop: 10 }] }
                             labelStyle={{ fontSize: 16 }}
                             buttonColor="gray"
                             icon={ loadingMap ? '' : 'check-circle' }
                             mode="contained"
-                            onPress={() => navigation.navigate("Mapa")}
+                            onPress={
+                                () => handleNavigateToMap && handleNavigateToMap(item)
+                            }
                         >
                             {
                                 loadingMap ? <
                                 Loading size="small" color='#fff'/> : 
                                 "Mapa"
                             }
-                        </Button>)
+                        </Button>
+                    }
+
+                    {   currentStatus === "em transito"
+                         && 
+                        <Button
+                            style={ [globalStyles.button, { marginTop: 10 }] }
+                            labelStyle={{ fontSize: 16 }}
+                            buttonColor="gray"
+                            icon={ loadingMap ? '' : 'check-circle' }
+                            mode="contained"
+                            onPress={
+                                () => handleNavigateToMap && handleNavigateToMap(item)
+                            }
+                        >
+                            {
+                                loadingMap ? <
+                                Loading size="small" color='#fff'/> : 
+                                "Mapa"
+                            }
+                        </Button>
                     }
             </View>
             

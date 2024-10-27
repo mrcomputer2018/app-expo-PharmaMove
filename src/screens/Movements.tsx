@@ -14,6 +14,7 @@ import ListMovements from '../components/ListMovements';
 import Loading from '../components/Loading';
 
 export interface IMovement {
+    route: any;
     id: number;
     produto: {
         nome: string;

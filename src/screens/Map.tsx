@@ -1,42 +1,72 @@
 import { useState } from 'react';
 import { View, Text, SafeAreaView, StyleSheet } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
+import { IMovement } from './Movements';
+import ActivityIndicator from "react-native-paper/src/components/ActivityIndicator";
 
 
-export default function Map() {
+export default function Map(props: IMovement) {
+
+    console.log('Map',props.route.params.item.destino)
+    const { origem } = props.route.params.item
+    const { destino } = props.route.params.item
     
-    const [latitude, setLatitude] = useState(0)
-    const [longitude, setLongitude] = useState(0)
+    const [latitude, setLatitude] = useState(destino.latitude)
+    const [longitude, setLongitude] = useState(destino.longitude)
 
     return (
         <SafeAreaView style={styles.container}>
-
-            <Text>Usando Maps</Text>
-
             { 
                 (latitude && longitude) ? 
                 (
                 <MapView 
-                    style={{ width: 340, height: 600 }}
+                    style={{ flex: 1, width: '100%' }}
                     initialRegion={{
-                        latitude: -7.5529504,
-                        longitude: -48.8832875,
-                        latitudeDelta: 1,
-                        longitudeDelta: 1
+                        latitude: (origem.latitude + destino.latitude) / 2,
+                        longitude: (origem.longitude + destino.longitude) / 2,
+                        latitudeDelta: Math.abs(origem.latitude - destino.latitude) * 2,
+                        longitudeDelta: Math.abs(origem.longitude - destino.longitude) * 2
                     }}
                 >
                     <Marker 
                         coordinate={{
-                            latitude: -7.5529504,
-                            longitude: -48.8832875
+                            latitude: destino.latitude,
+                            longitude: destino.longitude
                         }}
-                        title="Pokemon"
-                        description="Pokemon encontrado"
+                        title={destino.nome}
+                        description="Destino da entrega"
+                    />
+
+                    <Marker 
+                        coordinate={{
+                            latitude: origem.latitude,
+                            longitude: origem.longitude
+                        }}
+                        title={origem.nome}
+                        description="Origem da entrega"
+                    />
+
+                    <Polyline
+                        coordinates={[
+                            { 
+                                latitude: origem.latitude, 
+                                longitude: origem.longitude 
+                            },
+                            { 
+                                latitude: destino.latitude, 
+                                longitude: destino.longitude 
+                            }
+                        ]}
+                        strokeColor="red"
+                        strokeWidth={3}
                     />
                 </MapView>
                 ) : 
                 (
-                    <Text>Carregando...</Text>
+                    <View>
+                        <ActivityIndicator />
+                        <Text>Carregando...</Text>
+                    </View>
                 )
             }
         </SafeAreaView>
@@ -50,4 +80,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    loading: {  
+
+    }
 });
