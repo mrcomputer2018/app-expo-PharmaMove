@@ -32,7 +32,7 @@ export default function ListMovementsDriver({ item, getMovements, handleNavigate
 
     const [ loadingDelivery, setLoadingDelivery ] = useState(false);
     const [ loadingMap, setLoadingMap ] = useState(false);
-    const [currentStatus, setCurrentStatus] = useState("created");
+    const [currentStatus, setCurrentStatus] = useState(item.status);
 
     async function getImageCamera() {
         const permission = await ImagePicker.requestCameraPermissionsAsync()
@@ -78,6 +78,7 @@ export default function ListMovementsDriver({ item, getMovements, handleNavigate
         .catch((error) => {
             console.log(error);
             console.log("DEU RUIM NO UPLOAD");
+            Alert.alert("Error","Erro ao iniciar entrega!");
         });
     }
 
@@ -355,7 +356,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     textOrder :{
-        color: '#404040', // or another valid color
+        color: '#404040',
         fontSize: 16,
         fontWeight: 'bold',
     }
