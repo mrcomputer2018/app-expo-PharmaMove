@@ -81,9 +81,9 @@ export default function Movements({ navigation } : any) {
                 flex:1,
                 paddingBottom: 80 
             }}>
-            <StatusBar style="light"  backgroundColor='#004085'/>
+            {<StatusBar style="light"  backgroundColor='#004085'/>}
             
-            <View style={ styles.areaViewHeader}>
+            <View style={ globalStyles.areaViewHeader}>
                 {user && 
                 <Header data={ user as unknown as User | null } 
                 signOut={ signOut }/>} 

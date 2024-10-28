@@ -54,4 +54,7 @@ export const globalStyles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
     },
+    areaViewHeader: {
+        marginTop: 25,
+    }
 });

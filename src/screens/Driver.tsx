@@ -10,6 +10,7 @@ import ListMovementsDriver from '../components/ListMovementsDriver';
 import { globalStyles } from '../styles/globalStyles';
 import Empty from '../components/Empty';
 import Loading from '../components/Loading';
+import { StatusBar } from 'expo-status-bar';
 
 export default function Driver({ navigation }: any) {
 
@@ -44,10 +45,13 @@ export default function Driver({ navigation }: any) {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            {<StatusBar style="light"  backgroundColor='#004085'/>}
             
-            {user && 
-            <Header data={ user as unknown as User | null } 
-            signOut={ signOut }/>}
+            <View style={ globalStyles.areaViewHeader}>
+                {user && 
+                <Header data={ user as unknown as User | null } 
+                signOut={ signOut }/>} 
+            </View>
 
             <View style={{ 
                 flex: 1, 
