@@ -34,7 +34,7 @@ export default function Presentation({navigation}: any) {
         
             <View style={ globalStyles.areaView }>
                 <Text 
-                style={ [ globalStyles.text, { opacity: 0.8 }] }
+                style={ [ globalStyles.text, { opacity: 0.7, fontSize: 16 }] }
                 variant='labelLarge'>
                     Otimize a movimentação de produtos entre nossas filiais 
                     com praticidade e agilidade. Simplifique sua rotina 

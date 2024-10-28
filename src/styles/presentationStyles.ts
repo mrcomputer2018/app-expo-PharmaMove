@@ -7,9 +7,9 @@ export const presentationStyles = StyleSheet.create({
         backgroundColor: "#004085",
     },
     image: {
-        width: 120, 
-        height: 120, 
-        borderRadius: 60, 
+        width: 140, 
+        height: 140, 
+        borderRadius: 70, 
         marginBottom: 20
     }
 });
