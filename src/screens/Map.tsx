@@ -51,57 +51,61 @@ export default function Map(props: MapProps) {
   return (
         <SafeAreaView style={styles.container}>
         {origem.latitude && origem.longitude && destino.latitude && destino.longitude ? (
-          <View style={styles.mapContainer}>
-            <MapView
-              style={styles.map}
-              ref={mapEl}
-              provider={PROVIDER_GOOGLE}
-              initialRegion={{
-                latitude: (origem.latitude + destino.latitude) / 2,
-                longitude: (origem.longitude + destino.longitude) / 2,
-                latitudeDelta: Math.abs(origem.latitude - destino.latitude) * 1.8,
-                longitudeDelta: Math.abs(origem.longitude - destino.longitude) * 1.8,
-              }}
-            >
-              <Marker 
+            <View style={styles.mapContainer}>
+                <MapView
+                style={styles.map}
+                ref={mapEl}
+                provider={PROVIDER_GOOGLE}
+                initialRegion={{
+                    latitude: (origem.latitude + destino.latitude) / 2,
+                    longitude: (origem.longitude + destino.longitude) / 2,
+                    latitudeDelta: Math.abs(origem.latitude - destino.latitude) * 1.8,
+                    longitudeDelta: Math.abs(origem.longitude - destino.longitude) * 1.8,
+                }}
+                >
+                <Marker 
                 coordinate={{ latitude: origem.latitude, longitude: origem.longitude }}
                 title={origem.nome}
                 description="Origem da entrega"
-              />
-              <Marker 
+                />
+                <Marker 
                 coordinate={{ latitude: destino.latitude, longitude: destino.longitude }}
                 title={destino.nome}
                 description="Destino da entrega"
-              />
+                />
               
-              {coordinates.length > 0 && (
-                <Polyline coordinates={coordinates} strokeColor="red" strokeWidth={4} />
-              )}
+                {coordinates.length > 0 && (
+                    <Polyline coordinates={coordinates} strokeColor="red" strokeWidth={4} />
+                )}
 
-              <MapViewDirections
-                origin={{ latitude: origem.latitude, longitude: origem.longitude }}
-                destination={{ latitude: destino.latitude, longitude: destino.longitude }}
-                apikey={process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyDHSmaN9oYe9ddQDgb4aozgDZepEKtSaMk'}
-                strokeColor="blue"
-                strokeWidth={4}
-                onReady={result => {
-                  setDistance(result.distance);
-                  setDuration(result.duration);
-                  setCoordinates(result.coordinates);
-                }}
-                onError={error => console.error('Erro ao calcular a rota:', error)}
-              />
-            </MapView>
-            <View style={styles.infoContainer}>
-              <Text style={styles.textInfo}>Distância: {(distance ?? 0).toFixed(2)} km</Text>
-              <Text style={styles.textInfo}>Tempo estimado: {((duration ?? 0) / 60).toFixed(2)} horas</Text>
+                <MapViewDirections
+                    origin={{ latitude: origem.latitude, longitude: origem.longitude }}
+                    destination={{ latitude: destino.latitude, longitude: destino.longitude }}
+                    apikey={process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyDHSmaN9oYe9ddQDgb4aozgDZepEKtSaMk'}
+                    strokeColor="blue"
+                    strokeWidth={4}
+                    onReady={result => {
+                    setDistance(result.distance);
+                    setDuration(result.duration);
+                    setCoordinates(result.coordinates);
+                    }}
+                    onError={error => console.error('Erro ao calcular a rota:', error)}
+                />
+                </MapView>
+                <View style={styles.infoContainer}>
+                    <Text style={styles.textInfo}>
+                        Distância: {(distance ?? 0).toFixed(2)} km
+                    </Text>
+                    <Text style={styles.textInfo}>
+                        Tempo estimado: {((duration ?? 0) / 60).toFixed(2)} horas
+                    </Text>
+                </View>
             </View>
-          </View>
         ) : (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size={48} color='#004085' />
-            <Text style={styles.textLoading}>Carregando...</Text>
-          </View>
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size={48} color='#004085' />
+                <Text style={styles.textLoading}>Carregando...</Text>
+            </View>
         )}
       </SafeAreaView>
   );
