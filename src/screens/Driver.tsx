@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { View, Text, SafeAreaView, FlatList, Alert } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import { IMovement } from './Movements';
 import axios from 'axios';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { User } from '../components/Header';
 import Header from '../components/Header';
@@ -10,13 +12,15 @@ import ListMovementsDriver from '../components/ListMovementsDriver';
 import { globalStyles } from '../styles/globalStyles';
 import Empty from '../components/Empty';
 import Loading from '../components/Loading';
-import { StatusBar } from 'expo-status-bar';
 
 export default function Driver({ navigation }: any) {
 
     const { user, signOut } = useAuth();
     const [loading, setLoading] = useState(false);
     const  [movements, setMovements] = useState<IMovement[]>([]);
+
+    // Hook para obter a altura da StatusBar e das outras áreas seguras
+    const insets = useSafeAreaInsets();
 
 
     function getMovements() {
@@ -44,8 +48,11 @@ export default function Driver({ navigation }: any) {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            {<StatusBar style="light"  backgroundColor='#004085'/>}
+        <View style={[{ flex: 1 }, { paddingTop: insets.top }]}>
+            <StatusBar
+                style="light"  
+                backgroundColor='#004085'
+            />
             
             <View style={ globalStyles.areaViewHeader}>
                 {user && 
@@ -90,6 +97,6 @@ export default function Driver({ navigation }: any) {
                 }
             </View>
             
-        </SafeAreaView>
+        </View>
     );
 }
