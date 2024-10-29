@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { IMovement } from './Movements';
 import axios from 'axios';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Constants from "expo-constants"
 
 import { User } from '../components/Header';
 import Header from '../components/Header';
@@ -12,6 +13,8 @@ import ListMovementsDriver from '../components/ListMovementsDriver';
 import { globalStyles } from '../styles/globalStyles';
 import Empty from '../components/Empty';
 import Loading from '../components/Loading';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function Driver({ navigation }: any) {
 
@@ -48,11 +51,13 @@ export default function Driver({ navigation }: any) {
     }
 
     return (
-        <View style={[{ flex: 1 }, { paddingTop: insets.top }]}>
-            <StatusBar
-                style="light"  
-                backgroundColor='#004085'
-            />
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={{paddingTop: statusBarHeight + 6}}>
+                <StatusBar
+                    style="light"  
+                    backgroundColor='#004085'
+                />
+            </View>
             
             <View style={ globalStyles.areaViewHeader}>
                 {user && 
@@ -97,6 +102,6 @@ export default function Driver({ navigation }: any) {
                 }
             </View>
             
-        </View>
+        </SafeAreaView>
     );
 }
