@@ -56,5 +56,11 @@ export const globalStyles = StyleSheet.create({
     },
     areaViewHeader: {
         marginTop: 0,
+    },
+    areaTitle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+        marginVertical: 20,
     }
 });
