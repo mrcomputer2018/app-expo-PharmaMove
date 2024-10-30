@@ -52,7 +52,7 @@ export default function Driver({ navigation }: any) {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View style={{paddingTop: statusBarHeight + 6}}>
+            <View style={{ paddingTop: statusBarHeight }}>
                 <StatusBar
                     style="light"  
                     backgroundColor='#004085'

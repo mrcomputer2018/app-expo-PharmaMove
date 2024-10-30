@@ -1,8 +1,11 @@
+import { StatusBar } from 'expo-status-bar';
 import { Image, SafeAreaView, View } from 'react-native';
 import { Button, Text } from 'react-native-paper';
-import { StatusBar } from 'expo-status-bar';
+import Constants from 'expo-constants';
 import { globalStyles } from '../styles/globalStyles';
 import { presentationStyles as styles } from '../styles/presentationStyles';
+
+const statusBarHeight = Constants.statusBarHeight;
 
 
 export default function Presentation({navigation}: any) {
@@ -14,7 +17,12 @@ export default function Presentation({navigation}: any) {
     return (
        
         <SafeAreaView style={ [ globalStyles.container, styles.container ]}>
-            <StatusBar style="light" />
+            <View style={{ paddingTop: statusBarHeight }}>
+                <StatusBar
+                    style="light"  
+                    backgroundColor='#004085'
+                />
+            </View>
 
             <View>
                 <Image 
@@ -37,8 +45,7 @@ export default function Presentation({navigation}: any) {
                 style={ [ globalStyles.text, { opacity: 0.7, fontSize: 16 }] }
                 variant='labelLarge'>
                     Otimize a movimentação de produtos entre nossas filiais 
-                    com praticidade e agilidade. Simplifique sua rotina 
-                    e maximize a eficiência logística!
+                    com praticidade e agilidade. 
                 </Text>
             </View>
 

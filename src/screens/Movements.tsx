@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { View, Text, Alert, SafeAreaView, FlatList, StyleSheet } from 'react-native';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
+import Constants from 'expo-constants';
 import { globalStyles } from '../styles/globalStyles';
 import { movementsStyles as styles } from '../styles/movementsStyles';
 
@@ -33,6 +34,8 @@ export interface IMovement {
         descricao: string;
     }
 }
+
+const statusBarHeight = Constants.statusBarHeight;
 
 export default function Movements({ navigation } : any) {
 
@@ -81,7 +84,13 @@ export default function Movements({ navigation } : any) {
                 flex:1,
                 paddingBottom: 80 
             }}>
-            {<StatusBar style="light"  backgroundColor='#004085'/>}
+
+            <View style={{ paddingTop: statusBarHeight }}>
+                <StatusBar
+                    style="light"  
+                    backgroundColor='#004085'
+                />
+            </View>
             
             <View style={ globalStyles.areaViewHeader}>
                 {user && 
