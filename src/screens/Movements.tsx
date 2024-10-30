@@ -80,60 +80,59 @@ export default function Movements({ navigation } : any) {
     }
 
     return (
-        <SafeAreaView style={{ 
-                flex:1,
-                paddingBottom: 80 
-            }}>
-
-            <View style={{ paddingTop: statusBarHeight }}>
-                <StatusBar
-                    style="light"  
-                    backgroundColor='#004085'
-                />
-            </View>
-            
-            <View style={ globalStyles.areaViewHeader}>
-                {user && 
-                <Header data={ user as unknown as User | null } 
-                signOut={ signOut }/>} 
-            </View>
-
-            <View style={ styles.container }>
-            
-                <Button
-                    style={ [globalStyles.button, styles.buttonMovements] }
-                    labelStyle={{ fontSize: 18 }}
-                    buttonColor="#fd7e14"
-                    icon="plus-circle" 
-                    mode="contained" 
-                    onPress={handlenavigateToAddMovement}
-                >
-                    Adicionar Movimentação
-                </Button>
-
-                <Text style={ styles.titleMovement }>
-                    Movimentações
-                </Text>
-                { loading ? 
-                    <Loading size={60} color="#004085" /> 
-                    :
-                    <FlatList
-                        style={ styles.listMovements }
-                        data={movements}
-                        keyExtractor={ item => item.id.toString() }
-                        renderItem={({ item }: { item: IMovement }) => (
-                            <ListMovements 
-                            item={item} />
-                        )}
-                        showsVerticalScrollIndicator={false}
-                        ListEmptyComponent={
-                            <Empty message="Nenhuma movimentação encontrada." />
-                        }
-                        contentContainerStyle={{ 
-                            paddingBottom: 10,
-                        }}
+        <SafeAreaView style={ globalStyles.container }>
+            <View>
+                <View style={{ paddingTop: statusBarHeight }}>
+                    <StatusBar
+                        style="light"  
+                        backgroundColor='#004085'
                     />
-                }
+                </View>
+                
+                <View style={ globalStyles.areaViewHeader}>
+                    {user && 
+                    <Header data={ user as unknown as User | null } 
+                    signOut={ signOut }/>} 
+                </View>
+
+                <View style={ styles.container }>
+                
+                    <Button
+                        style={ [globalStyles.button, styles.buttonMovements] }
+                        labelStyle={{ fontSize: 18 }}
+                        buttonColor="#fd7e14"
+                        icon="plus-circle" 
+                        mode="contained" 
+                        onPress={handlenavigateToAddMovement}
+                    >
+                        Adicionar Movimentação
+                    </Button>
+
+                    <Text style={ styles.titleMovement }>
+                        Movimentações
+                    </Text>
+                    { loading ? 
+                        <Loading size={60} color="#004085" /> 
+                        :
+                        <FlatList
+                            style={ styles.listMovements }
+                            data={movements}
+                            keyExtractor={ item => item.id.toString() }
+                            renderItem={({ item }: { item: IMovement }) => (
+                                <ListMovements item={item} />
+                            )}
+                            showsVerticalScrollIndicator={false}
+                            ListEmptyComponent={
+                                <Empty message="Nenhuma movimentação encontrada." />
+                            }
+                            contentContainerStyle={{ 
+                                paddingBottom: 10,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        />
+                    }
+                </View>
             </View>
         </SafeAreaView>
     );
