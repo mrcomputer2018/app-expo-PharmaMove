@@ -2,6 +2,7 @@ import React, {useState } from 'react';
 import 
 { View, Text, TextInput, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Alert } 
 from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
 import { globalStyles } from '../styles/globalStyles';
 import {Picker} from '@react-native-picker/picker';
@@ -19,6 +20,7 @@ type FormData = {
     full_address: string;
     email: string;
     password: string;
+    confirmPassword: string;
 };
 
 interface OnChangeArg {
@@ -48,6 +50,12 @@ const schema = z.object({
     password: z.string()
         .min(6, 'A senha deve ter no mínimo 6 caracteres')
         .nonempty('O campo senha é obrigatório'),
+    confirmPassword: z.string()
+        .min(6, 'A senha deve ter no mínimo 6 caracteres')
+        .nonempty('O campo senha é obrigatório'),
+    }).refine((data) => data.password === data.confirmPassword, {
+        path: ['confirmPassword'],
+        message: 'As senhas não correspondem',
 });
 
 
@@ -65,6 +73,7 @@ export default function AddUsers() {
             full_address: '',
             email: '',
             password: '',
+            confirmPassword: '',
         }
     });
 
@@ -93,7 +102,8 @@ export default function AddUsers() {
                 document: '',
                 full_address: '',
                 email: '',
-                password: ''
+                password: '',
+                confirmPassword: '',
             });
         })
         .catch((error) => {
@@ -224,6 +234,13 @@ export default function AddUsers() {
                     }
                 </View>
 
+                <View style={ globalStyles.areaTitle}>
+                    <Feather name="user" size={24} color="black" />
+                    <Text style={ [globalStyles.title, {marginBottom: 0}] }>
+                        Dados de login
+                    </Text>
+                </View>
+
                 {/* email */}
                 <View style={styles.formGroup}>
                     <Text style={styles.label}>E-mail</Text>
@@ -263,7 +280,7 @@ export default function AddUsers() {
                                 style={styles.input}
                                 placeholder="Senha"
                                 secureTextEntry
-                                returnKeyType="done"
+                                returnKeyType="next"
                                 onBlur={onBlur}
                                 onChangeText={value => onChange(value)}
                                 value={value as unknown as string}
@@ -273,6 +290,32 @@ export default function AddUsers() {
                     { errors.password && 
                         <Text style={styles.errorText}>
                             {errors.password.message}
+                        </Text>
+                    }
+                </View>
+
+               {/*  confirmar senha */}
+               <View style={styles.formGroup}>
+                    <Text style={styles.label}>Confirme a senha</Text>
+                    <Controller
+                        control={control}
+                        name="confirmPassword"
+                        rules={{ required: true }}
+                        render={({field: { onChange, onBlur, value }}) => (
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Confirme a senha"
+                                secureTextEntry
+                                returnKeyType="done"
+                                onBlur={onBlur}
+                                onChangeText={value => onChange(value)}
+                                value={value as unknown as string}
+                            />
+                        )}
+                    />
+                    { errors.confirmPassword && 
+                        <Text style={styles.errorText}>
+                            {errors.confirmPassword.message}
                         </Text>
                     }
                 </View>

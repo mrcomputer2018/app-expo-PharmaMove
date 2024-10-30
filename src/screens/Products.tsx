@@ -94,6 +94,13 @@ export default function Products() {
                     />
                 </View>
 
+                {/* Produtos encontrados na pesquisa */}
+                { search !== ''&&
+                    <Text style={ styles.quantitySearch }>
+                        { productsFiltered.length } produto(s) encontrado(s).
+                    </Text>
+                }
+
                 <View  style={ styles.areaTypeOfSearch }>
                     {/* Produto */}
                     <TouchableOpacity 

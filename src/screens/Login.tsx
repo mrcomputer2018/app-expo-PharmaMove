@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, View } from 'react-native';
+import { ImageBackground, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { globalStyles } from '../styles/globalStyles';
 import { loginStyles as styles } from '../styles/loginStyles';
 import { Button, TextInput, Text } from 'react-native-paper';
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../contexts/AuthContext';
 import Loading from '../components/Loading';
@@ -35,7 +36,11 @@ export default function Login({ navigation }: any) {
 
     // useForm com Zod integration para validação
     const { register, setValue, handleSubmit, control, reset, formState: { errors } } = useForm<FormData>({
-        resolver: zodResolver(schema)
+        resolver: zodResolver(schema),
+        defaultValues: {
+            email: '',
+            password: ''
+        }
     });
 
     // Função chamada quando o formulário é enviado corretamente
@@ -50,7 +55,9 @@ export default function Login({ navigation }: any) {
     };
 
     return (
-        <SafeAreaView style={[globalStyles.container, styles.container
+        <ImageBackground 
+        source={require('../assets/bg_presentation.jpg')}
+        style={[globalStyles.container, styles.container
         ]}>
             <StatusBar style="light" />
 
@@ -63,18 +70,32 @@ export default function Login({ navigation }: any) {
                 </Text>
             </View>
 
+            <LinearGradient
+                // Background Linear Gradient
+                colors={['transparent','rgba(0,0,0,.9)']}
+                style={styles.background}
+            />
+
             <View style={ globalStyles.formGroup }>
-                <TextInput
-                    label="E-mail"
-                    // Integração com React Hook Form
-                    onChangeText={(text) => setValue('email', text)}
-                    selectionColor="#004085"
-                    underlineColorAndroid={ '#fd7e14' }
-                    textColor='#004085'
-                    autoCapitalize='none'
-                    placeholderTextColor="#6c757d"
-                    keyboardType='email-address'
-                    right={<TextInput.Icon icon="mail" color="#004085" />}
+                <Controller 
+                    control={control}
+                    name="email"
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            label="E-mail"
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            value={value}
+                            selectionColor="#004085"
+                            underlineColorAndroid={ '#fd7e14' }
+                            textColor='#004085'
+                            autoCapitalize='none'
+                            placeholderTextColor="#6c757d"
+                            keyboardType='email-address'
+                            right={<TextInput.Icon icon="mail" color="#004085" />}
+                        />
+                    )}
                 />
 
                 {errors.email && <Text style={styles.errorText}>
@@ -83,20 +104,29 @@ export default function Login({ navigation }: any) {
             </View>
 
             <View style={ globalStyles.formGroup }>
-                <TextInput
-                    label="Senha"
-                    onChangeText={(text) => setValue('password', text)} 
-                    selectionColor="#004085"
-                    underlineColorAndroid={ '#fd7e14' }
-                    textColor='#004085'
-                    secureTextEntry={!showPassword}
-                    placeholderTextColor="#6c757d"
-                    right={<TextInput.Icon 
-                        icon={showPassword ? "eye-off" : "eye"}
-                        color="#004085"
-                        onPress={() => setShowPassword(!showPassword)}
+                <Controller 
+                    control={control}
+                    name="password"
+                    rules={{ required: true }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            label="Senha"
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            value={value}
+                            selectionColor="#004085"
+                            underlineColorAndroid={ '#fd7e14' }
+                            textColor='#004085'
+                            secureTextEntry={!showPassword}
+                            placeholderTextColor="#6c757d"
+                            right={<TextInput.Icon 
+                                icon={showPassword ? "eye-off" : "eye"}
+                                color="#004085"
+                                onPress={() => setShowPassword(!showPassword)}
+                                />
+                            }
                         />
-                    }
+                    )}
                 />
 
                 {errors.password && <Text style={styles.errorText}>
@@ -114,6 +144,6 @@ export default function Login({ navigation }: any) {
             >
                 { loading ? <Loading size="small" color='white'/> : 'Logar' }
             </Button>
-        </SafeAreaView>
+        </ImageBackground>
     );
 }

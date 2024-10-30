@@ -31,6 +31,11 @@ export const productsStyles = StyleSheet.create({
         width: '90%',
         height: "100%",
     },
+    quantitySearch: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 10,
+    },
     areaTypeOfSearch: {
         flexDirection: 'row',
         justifyContent: 'space-around',
