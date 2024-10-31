@@ -7,16 +7,23 @@ export const movementsStyles = StyleSheet.create({
     container: {
         padding: 20,
     },
+    areaTitleMovement: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        gap: 10,
+        marginBottom: 10,
+    },
     titleMovement : {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 20,
     },
     buttonMovements: {
-        marginBottom: 30,
-        marginTop: 20,
+        marginBottom: 20,
+        marginTop: 10,
     },
     listMovements: {
         height: 530,
+        width: '100%',
     }
 });

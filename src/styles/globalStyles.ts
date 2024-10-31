@@ -24,7 +24,7 @@ export const globalStyles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontWeight: "bold",
-        marginBottom: 20,
+        marginBottom: 10,
     },
     label: {
         marginBottom: 5,

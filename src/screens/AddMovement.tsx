@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, Text, KeyboardAvoidingView, Platform, ScrollView, TextInput, Alert } from 'react-native';
+import { View, Text, KeyboardAvoidingView, ScrollView, TextInput, Alert } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { z } from 'zod';
 import { Picker } from '@react-native-picker/picker';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -179,13 +180,15 @@ export default function AddMovement() {
 
     return (
         <KeyboardAvoidingView 
-            style={ [globalStyles.container, { marginBottom: 20 }] }
+            style={ [globalStyles.container, { marginBottom: 5 }] }
             keyboardVerticalOffset={100}
         >
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-                <View>
+                <View style={ globalStyles.areaTitle}>
+                    <Feather name="truck" size={24} color="black" />
                     <Text style={ [globalStyles.title, {
-                            marginTop: 30,
+                            marginTop: 0,
+                            marginBottom: 0,
                         } 
                     ]}>
                         Movimentação
