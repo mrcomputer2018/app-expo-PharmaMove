@@ -98,7 +98,9 @@ export default function Login({ navigation }: any) {
                     )}
                 />
 
-                {errors.email && <Text style={styles.errorText}>
+                {errors.email && <Text style={[styles.errorText, {
+                    color: '#f50'
+                }]}>
                     {errors.email.message}
                 </Text>}
             </View>
@@ -129,7 +131,9 @@ export default function Login({ navigation }: any) {
                     )}
                 />
 
-                {errors.password && <Text style={styles.errorText}>
+                {errors.password && <Text style={[styles.errorText, {
+                    color: '#f50'
+                }]}>
                     {errors.password.message}
                 </Text>}
             </View>
