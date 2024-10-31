@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { Image, ImageBackground, SafeAreaView, View } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Animated, Image, ImageBackground, Text, View } from 'react-native';
+import { Button } from 'react-native-paper';
 import Constants from 'expo-constants';
 import { globalStyles } from '../styles/globalStyles';
+import FadeInRight from 'react-native-reanimated';
+import AnimatedText from 'react-native-reanimated';
 import { presentationStyles as styles } from '../styles/presentationStyles';
 
 const statusBarHeight = Constants.statusBarHeight;
@@ -36,7 +38,6 @@ export default function Presentation({navigation}: any) {
             <View style={ globalStyles.areaView }>
                 <Text 
                 style={ globalStyles.text }
-                variant="displaySmall"
                 >
                     Bem-vindo ao PharmaMove!
                 </Text>
@@ -45,7 +46,7 @@ export default function Presentation({navigation}: any) {
             <View style={ globalStyles.areaView }>
                 <Text 
                 style={ [ globalStyles.text, { opacity: 0.8, fontSize: 16 }] }
-                variant='labelLarge'>
+                >
                     Otimize a movimentação de produtos entre nossas filiais 
                     com praticidade e agilidade. 
                 </Text>

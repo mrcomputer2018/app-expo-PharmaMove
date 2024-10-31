@@ -11,6 +11,8 @@ export const globalStyles = StyleSheet.create({
     text: {
         textAlign: "center",
         color: "#f8f9fa",
+        fontSize: 34,
+        letterSpacing: 1,
     },
     button: {
         marginTop: 40,
@@ -49,7 +51,7 @@ export const globalStyles = StyleSheet.create({
     errorText: {
         color: 'red',
         marginBottom: 10,
-        fontSize: 15,
+        fontSize: 16,
         fontWeight: 'bold',
     },
     textProduct: {
