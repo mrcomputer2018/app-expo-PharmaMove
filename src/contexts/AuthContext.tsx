@@ -2,7 +2,6 @@ import axios from 'axios';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { ReactNode } from 'react';
 import { getData, storeData } from '../services/storage';
-import { set } from 'react-hook-form';
 
 interface AuthContextData {
     user: User | null;
@@ -61,7 +60,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setProfile(response.data);
             storeData('@user', response.data);
             storeData('@profile', response.data);
-            console.log(profile);
             setLoading(false);
         })
         .catch((error) => {

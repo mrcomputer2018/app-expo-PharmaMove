@@ -5,6 +5,7 @@ export const presentationStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: "#004085",
+        paddingHorizontal: 50,
     },
     image: {
         width: 140, 

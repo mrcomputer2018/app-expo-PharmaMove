@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { View, Text, Alert, SafeAreaView, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Alert, SafeAreaView, FlatList} from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 import Constants from 'expo-constants';
@@ -80,7 +81,9 @@ export default function Movements({ navigation } : any) {
     }
 
     return (
-        <SafeAreaView style={ globalStyles.container }>
+        <SafeAreaView style={ [globalStyles.container, {
+            padding: 0
+        }] }>
             <View>
                 <View style={{ paddingTop: statusBarHeight }}>
                     <StatusBar
@@ -96,6 +99,12 @@ export default function Movements({ navigation } : any) {
                 </View>
 
                 <View style={ styles.container }>
+                    <View style={ styles.areaTitleMovement }>
+                        <Feather name="truck" size={24} color="black" />
+                        <Text style={ styles.titleMovement }>
+                            Movimentações
+                        </Text>
+                    </View>
                 
                     <Button
                         style={ [globalStyles.button, styles.buttonMovements] }
@@ -107,10 +116,8 @@ export default function Movements({ navigation } : any) {
                     >
                         Adicionar Movimentação
                     </Button>
-
-                    <Text style={ styles.titleMovement }>
-                        Movimentações
-                    </Text>
+                    
+                    
                     { loading ? 
                         <Loading size={60} color="#004085" /> 
                         :
@@ -126,9 +133,9 @@ export default function Movements({ navigation } : any) {
                                 <Empty message="Nenhuma movimentação encontrada." />
                             }
                             contentContainerStyle={{ 
-                                paddingBottom: 10,
+                                flexGrow: 1,
                                 justifyContent: 'center',
-                                alignItems: 'center',
+                                marginBottom: 10
                             }}
                         />
                     }
