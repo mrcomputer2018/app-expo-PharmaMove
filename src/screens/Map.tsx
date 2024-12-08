@@ -81,7 +81,7 @@ export default function Map(props: MapProps) {
                 <MapViewDirections
                     origin={{ latitude: origem.latitude, longitude: origem.longitude }}
                     destination={{ latitude: destino.latitude, longitude: destino.longitude }}
-                    apikey={process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyDHSmaN9oYe9ddQDgb4aozgDZepEKtSaMk'}
+                    apikey={process.env.GOOGLE_MAPS_API_KEY}
                     strokeColor="blue"
                     strokeWidth={4}
                     onReady={result => {
